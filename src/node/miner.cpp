@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2022 The COINWOW Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -65,16 +71,17 @@ int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParam
 
 void RegenerateCommitments(CBlock& block, ChainstateManager& chainman)
 {
-    CMutableTransaction tx{*block.vtx.at(0)};
-    tx.vout.erase(tx.vout.begin() + GetWitnessCommitmentIndex(block));
-    block.vtx.at(0) = MakeTransactionRef(tx);
-
     const CBlockIndex* prev_block = WITH_LOCK(::cs_main, return chainman.m_blockman.LookupBlockIndex(block.hashPrevBlock));
-    chainman.GenerateCoinbaseCommitment(block, prev_block);
+
+    if (DeploymentActiveAfter(prev_block, chainman, Consensus::DEPLOYMENT_SEGWIT)) {
+        CMutableTransaction tx{*block.vtx.at(0)};
+        tx.vout.erase(tx.vout.begin() + GetWitnessCommitmentIndex(block));
+        block.vtx.at(0) = MakeTransactionRef(tx);
+        chainman.GenerateCoinbaseCommitment(block, prev_block);
+    }
 
     block.hashMerkleRoot = BlockMerkleRoot(block);
 }
-
 static BlockAssembler::Options ClampOptions(BlockAssembler::Options options)
 {
     Assert(options.block_reserved_weight <= MAX_BLOCK_WEIGHT);
@@ -164,15 +171,21 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock()
     coinbaseTx.vin[0].nSequence = CTxIn::MAX_SEQUENCE_NONFINAL; // Make sure timelock is enforced.
     coinbaseTx.vout.resize(1);
     coinbaseTx.vout[0].scriptPubKey = m_options.coinbase_output_script;
-    coinbaseTx.vout[0].nValue = 0;
+    coinbaseTx.vout[0].nValue = GetBlockSubsidy(pindexPrev->nHeight + 1, chainparams.GetConsensus());
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
     Assert(nHeight > 0);
     coinbaseTx.nLockTime = static_cast<uint32_t>(nHeight - 1);
-    pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
-    pblocktemplate->vchCoinbaseCommitment = m_chainstate.m_chainman.GenerateCoinbaseCommitment(*pblock, pindexPrev);
+ pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
+    if (DeploymentActiveAfter(pindexPrev, m_chainstate.m_chainman, Consensus::DEPLOYMENT_SEGWIT)) {
+        pblocktemplate->vchCoinbaseCommitment = m_chainstate.m_chainman.GenerateCoinbaseCommitment(*pblock, pindexPrev);
+    } else {
+        CMutableTransaction no_witness_tx{*pblock->vtx[0]};
+        no_witness_tx.vin[0].scriptWitness.stack.clear();
+        pblock->vtx[0] = MakeTransactionRef(std::move(no_witness_tx));
+        pblocktemplate->vchCoinbaseCommitment.clear();
+    }
 
     LogPrintf("CreateNewBlock(): block weight: %u txs: %u fees: %ld sigops %d\n", GetBlockWeight(*pblock), nBlockTx, nFees, nBlockSigOpsCost);
-
     // Fill in header
     pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
     UpdateTime(pblock, chainparams.GetConsensus(), pindexPrev);

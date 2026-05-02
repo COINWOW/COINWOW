@@ -1,3 +1,9 @@
+/* Copyright (C) 2009-2025 Bitcoin Core developers */
+
+/* Copyright (C) 2025-2026 COINWOW developers */
+
+/* Distributed under the MIT software license */
+
 /***********************************************************************
  * Copyright (c) Pieter Wuille, Gregory Maxwell                        *
  * Distributed under the MIT software license, see the accompanying    *

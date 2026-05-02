@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 //===- FuzzedDataProvider.h - Utility header for fuzz targets ---*- C++ -* ===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.

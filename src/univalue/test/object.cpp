@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 // Copyright (c) 2014 BitPay Inc.
 // Copyright (c) 2014-2022 The COINWOW Core developers
 // Distributed under the MIT software license, see the accompanying

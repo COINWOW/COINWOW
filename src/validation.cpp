@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 // Copyright (c) 2009-present The COINWOW Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -1941,9 +1947,16 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate& active_chainstate, CTxM
 // src/validation.cpp
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-  return 0;
-}
+    int halvings = nHeight / 200000;
 
+    if (halvings >= 64)
+        return 0;
+
+    CAmount nSubsidy = 25 * COIN;
+    nSubsidy >>= halvings;
+
+    return nSubsidy;
+}
 CoinsViews::CoinsViews(DBParams db_params, CoinsViewOptions options)
     : m_dbview{std::move(db_params), std::move(options)},
       m_catcherview(&m_dbview) {}
@@ -2697,7 +2710,7 @@ bool Chainstate::ConnectBlock(const CBlock& block, BlockValidationState& state, 
              Ticks<SecondsDouble>(m_chainman.time_connect),
              Ticks<MillisecondsDouble>(m_chainman.time_connect) / m_chainman.num_blocks_total);
 
-             CAmount blockReward = 0;
+CAmount blockReward = nFees + GetBlockSubsidy(pindex->nHeight, m_chainman.GetParams().GetConsensus());
     if (block.vtx[0]->GetValueOut() > blockReward && state.IsValid()) {
         state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-amount",
                       strprintf("coinbase pays too much (actual=%d vs limit=%d)", block.vtx[0]->GetValueOut(), blockReward));

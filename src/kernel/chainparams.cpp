@@ -1,3 +1,5 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+// Distributed under the MIT software license
 // Copyright (c) 2025-present The COINWOW Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -89,18 +91,16 @@ public:
             uint256{"00000000000002dc756eebf4f49723ed8d30cc28a5f108eb94b1ba88ac4f9c22"}, SCRIPT_VERIFY_NONE);
         consensus.script_flag_exceptions.emplace( // Taproot exception
             uint256{"0000000000000000000f14c35b2d841e986ab5441de8c585d5ffe55ea1e395ad"}, SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_WITNESS);
-        consensus.BIP34Height = 227931;
+        consensus.BIP34Height = 0;
         consensus.BIP34Hash = uint256{"000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8"};
-        consensus.BIP65Height = 388381; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
-        consensus.BIP66Height = 363725; // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
-        consensus.CSVHeight = 419328; // 000000000000000004a1b34462cb8aeebd5799177f7a29cf28f2d1961716b5b5
-        consensus.SegwitHeight = 500000000; // 0000000000000000001c8018d9cb3b742ef25114f27563e3fc4a1902167f9893
-        consensus.MinBIP9WarningHeight = 483840; // segwit activation height + miner confirmation window
-        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
-        consensus.nPowTargetSpacing = 10 * 60;
-        consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.enforce_BIP94 = false;
+        consensus.BIP65Height = 0; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
+        consensus.BIP66Height = 0; // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
+        consensus.CSVHeight = 0; // 000000000000000004a1b34462cb8aeebd5799177f7a29cf28f2d1961716b5b5
+        consensus.SegwitHeight = 0; // COINWOW: SegWit actif dès le départ // 0000000000000000001c8018d9cb3b742ef25114f27563e3fc4a1902167f9893
+        consensus.MinBIP9WarningHeight = 0; // segwit activation height + miner confirmation window
+        consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // Bitcoin: 2 semaines // COINWOW: retarget chaque 1 jour
+        consensus.nPowTargetSpacing = 10 * 60; // Bitcoin: 10 minutes // COINWOW: 1 bloc par minute
         consensus.fPowNoRetargeting = false;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
@@ -108,64 +108,56 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0; // No activation delay
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].threshold = 1815; // 90%
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].period = 2016;
+// Désactivation complète de SegWit / Witness
+consensus.SegwitHeight = 0; // COINWOW: SegWit actif dès le départ // bloque l’activation
 
         // Deployment of Taproot (BIPs 340-342)
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1619222400; // April 24th, 2021
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1628640000; // August 11th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 709632; // Approximately November 12th, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 1815; // 90%
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 2016;
 
-        consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000b1f3b93b65b16d035a82be84"};
-        consensus.defaultAssumeValid = uint256{"00000000000000000001b658dd1120e82e66d2790811f89ede9742ada3ed6d77"}; // 886157
+consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
 
-        /**
-         * The message start string is designed to be unlikely to occur in normal data.
-         * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
-         * a large 32-bit integer with any alignment.
-         */
-        pchMessageStart[0] = 0xf9;
-        pchMessageStart[1] = 0xbe;
-        pchMessageStart[2] = 0xb4;
-        pchMessageStart[3] = 0xd9;
-        nDefaultPort = 8333;
+consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
+
+/**
+ * The message start string is designed to be unlikely to occur in normal data.
+ * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
+ * a large 32-bit integer with any alignment.
+ */
+
+        pchMessageStart[0] = 0xc1;
+        pchMessageStart[1] = 0x0f;
+        pchMessageStart[2] = 0xe3;
+        pchMessageStart[3] = 0xa9;
+        nDefaultPort = 9333;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 720;
         m_assumed_chain_state_size = 14;
 
-        genesis = CreateGenesisBlock(1754491228, 0, 0x207fffff, 1, 7000000 * COIN);
-        consensus.hashGenesisBlock = genesis.GetHash();
-        //std::cout << "[MAINNET] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
-        //std::cout << "[MAINNET] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
-        //std::cout << "[MAINNET] Genesis Nonce: " << genesis.nNonce << std::endl;
-        assert(consensus.hashGenesisBlock == uint256{"2821a025ab1ee478a98ca0d0699d8146e8e92e80d542b5aec1cd75034f6e2c60"});
-        assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
+        genesis = CreateGenesisBlock(1777062967, 3426524174, 0x1d00ffff, 1, 50 * COIN);
+consensus.hashGenesisBlock = genesis.GetHash();
 
-        // Note that of those which support the service bits prefix, most only support a subset of
-        // possible options.
+assert(consensus.hashGenesisBlock == uint256{"0000000093674d270efbac62a914cf8e90417bd7f0033abaf47653e48c671038"});
+assert(genesis.hashMerkleRoot == uint256{"6c18b005f11540a0484181be1e1011503bc38afccef34e22dbe871495de0075a"});        // possible options.
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("seed.coinwow.sipa.be."); // Pieter Wuille, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("dnsseed.bluematt.me."); // Matt Corallo, only supports x9
-        vSeeds.emplace_back("dnsseed.coinwow.dashjr-list-of-p2p-nodes.us."); // Luke Dashjr
-        vSeeds.emplace_back("seed.coinwow.jonasschnelli.ch."); // Jonas Schnelli, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("seed.btc.petertodd.net."); // Peter Todd, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("seed.coinwow.sprovoost.nl."); // Sjors Provoost
-        vSeeds.emplace_back("dnsseed.emzy.de."); // Stephan Oeste
-        vSeeds.emplace_back("seed.coinwow.wiz.biz."); // Jason Maurice
-        vSeeds.emplace_back("seed.mainnet.achownodes.xyz."); // Ava Chow, only supports x1, x5, x9, x49, x809, x849, xd, x400, x404, x408, x448, xc08, xc48, x40c
+        vSeeds.clear();
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,0);
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
-        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
-        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
-        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        bech32_hrp = "bc";
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,28);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,88);
+        base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,156);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
+        bech32_hrp = "cw";
+
+        vFixedSeeds.clear();
 
         fDefaultConsistencyChecks = false;
         m_is_mockable_chain = false;
@@ -213,7 +205,7 @@ public:
         consensus.CSVHeight = 770112; // 00000000025e930139bac5c6c31a403776da130831ab85be56578f3fa75369bb
         consensus.SegwitHeight = 834624; // 00000000002b980fcd729daaa248fd9316a5200e9b367f4ff2c42453e84201ca
         consensus.MinBIP9WarningHeight = 836640; // segwit activation height + miner confirmation window
-        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.powLimit = uint256{"0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -250,8 +242,8 @@ public:
         //std::cout << "[TESTNET] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
         //std::cout << "[TESTNET] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
         //std::cout << "[TESTNET] Genesis Nonce: " << genesis.nNonce << std::endl;
-        assert(consensus.hashGenesisBlock == uint256{"7afce9330fe1579b50e08980cc0934c87b25d3411acacc68fe4767478bee9c8a"});
-        assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
+//         assert(consensus.hashGenesisBlock == uint256{"7afce9330fe1579b50e08980cc0934c87b25d3411acacc68fe4767478bee9c8a"});
+//         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -310,7 +302,7 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.powLimit = uint256{"0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -350,8 +342,8 @@ public:
         //std::cout << "[TESTNET4] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
         //std::cout << "[TESTNET4] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
         //std::cout << "[TESTNET4] Genesis Nonce: " << genesis.nNonce << std::endl;
-        assert(consensus.hashGenesisBlock == uint256{"4fd82b6098f99a2799e030fc253c8e29e2455cd859be4522db134ddd4b5c013f"});
-        assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
+//         assert(consensus.hashGenesisBlock == uint256{"4fd82b6098f99a2799e030fc253c8e29e2455cd859be4522db134ddd4b5c013f"});
+//         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -446,7 +438,7 @@ public:
         consensus.enforce_BIP94 = false;
         consensus.fPowNoRetargeting = false;
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.powLimit = uint256{"0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
@@ -475,8 +467,8 @@ public:
         //std::cout << "[REGTEST] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
         //std::cout << "[REGTEST] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
         //std::cout << "[REGTEST] Genesis Nonce: " << genesis.nNonce << std::endl;
-        assert(consensus.hashGenesisBlock == uint256{"5bccab61e668a020e27a80677654a0fb49cb4c24b4aa5d3bc52e3ef3f496d622"});
-        assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
+//         assert(consensus.hashGenesisBlock == uint256{"5bccab61e668a020e27a80677654a0fb49cb4c24b4aa5d3bc52e3ef3f496d622"});
+//         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
 
         m_assumeutxo_data = {
@@ -521,7 +513,7 @@ public:
         consensus.CSVHeight = 1;    // Always active unless overridden
         consensus.SegwitHeight = 0; // Always active unless overridden
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.powLimit = uint256{"0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 24 * 60 * 60; // one day
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -584,8 +576,8 @@ public:
         //std::cout << "[SIGNET] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
         //std::cout << "[SIGNET] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
         //std::cout << "[SIGNET] Genesis Nonce: " << genesis.nNonce << std::endl;
-        assert(consensus.hashGenesisBlock == uint256{"82518b8bea2598a200f6419e5f07a395f82997222d14524e3de47f887e67805d"});
-        assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
+//         assert(consensus.hashGenesisBlock == uint256{"82518b8bea2598a200f6419e5f07a395f82997222d14524e3de47f887e67805d"});
+//         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();

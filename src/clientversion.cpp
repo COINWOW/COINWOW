@@ -1,6 +1,6 @@
-// Copyright (c) 2012-2022 The COINWOW Core developers
-// Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// Copyright (C) 2009-2025 Bitcoin Core developers
+// Copyright (C) 2025 COINWOW developers
+// Distributed under the MIT software license
 
 #include <coinwow-build-config.h> // IWYU pragma: keep
 
@@ -20,7 +20,7 @@ using util::Join;
  * for both coinwowd and coinwow-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string UA_NAME("Satoshi");
+const std::string UA_NAME("WOW");
 
 
 #include <coinwow-build-info.h>

@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 #ifndef _MINISKETCH_H_
 #define _MINISKETCH_H_ 1
 

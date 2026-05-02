@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-present The COINWOW Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -139,11 +145,12 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock&& block, uint64_t&
     block_out.reset();
     block.hashMerkleRoot = BlockMerkleRoot(block);
 
-    while (max_tries > 0 && block.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(block.GetHash(), block.nBits, chainman.GetConsensus()) && !chainman.m_interrupt) {
+    while (block.nNonce < std::numeric_limits<uint32_t>::max()
+           && !CheckProofOfWork(block.GetHash(), block.nBits, chainman.GetConsensus())
+           && !chainman.m_interrupt) {
         ++block.nNonce;
-        --max_tries;
     }
-    if (max_tries == 0 || chainman.m_interrupt) {
+    if (chainman.m_interrupt) {
         return false;
     }
     if (block.nNonce == std::numeric_limits<uint32_t>::max()) {

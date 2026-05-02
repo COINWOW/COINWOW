@@ -1,3 +1,9 @@
+// Copyright (C) 2009-2025 Bitcoin Core developers
+
+// Copyright (C) 2026 COINWOW developers
+
+// Distributed under the MIT software license
+
 //  __   _ _______ __   _  _____  ______  _______ __   _ _______ _     _
 //  | \  | |_____| | \  | |     | |_____] |______ | \  | |       |_____|
 //  |  \_| |     | |  \_| |_____| |_____] |______ |  \_| |_____  |     |

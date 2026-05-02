@@ -1,3 +1,9 @@
+/* Copyright (C) 2009-2025 Bitcoin Core developers */
+
+/* Copyright (C) 2025-2026 COINWOW developers */
+
+/* Distributed under the MIT software license */
+
 /*************************************************************************
  * Copyright (c) 2020-2021 Elichai Turkel                                *
  * Distributed under the CC0 software license, see the accompanying file *
