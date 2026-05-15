@@ -101,7 +101,7 @@
  *
  * Context:
  * - In an earlier version of the transaction request logic it was possible for a peer to prevent us from seeing a
- *   specific transaction. See https://coinwowcore.org/en/2024/07/03/disclose_already_asked_for.
+ *   specific transaction. See https://coinwow.ca/en/2024/07/03/disclose_already_asked_for.
  */
 class TxRequestTracker {
     // Avoid littering this header file with implementation details.
