@@ -1,0 +1,140 @@
+QWidget {
+    background-color: #0d0d0d;
+    color: white;
+    font-family: Segoe UI;
+    font-size: 10pt;
+}
+
+QMenuBar {
+    background-color: #111111;
+    color: white;
+}
+
+QMenuBar::item:selected {
+    background: #1f1f1f;
+}
+
+QMenu {
+    background-color: #111111;
+    color: white;
+}
+
+QMenu::item:selected {
+    background-color: #222222;
+}
+
+QPushButton {
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+QPushButton:hover {
+    background-color: #2a2a2a;
+}
+
+QLineEdit {
+    background-color: #151515;
+    border: 1px solid #333333;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+QTableView {
+    background-color: #101010;
+    alternate-background-color: #181818;
+    gridline-color: #222222;
+}
+
+QHeaderView::section {
+    background-color: #151515;
+    color: white;
+    padding: 4px;
+    border: 1px solid #222222;
+}
+
+QFrame {
+    background-color: #111111;
+    color: white;
+}
+
+QScrollArea {
+    background-color: #111111;
+    color: white;
+}
+
+QAbstractScrollArea {
+    background-color: #111111;
+    color: white;
+}
+
+QStackedWidget {
+    background-color: #111111;
+    color: white;
+}
+QSplitter {
+    background-color: #0d0d0d;
+}
+
+QSplitter::handle {
+    background-color: #222222;
+}
+
+QLabel {
+    background-color: transparent;
+    color: white;
+}
+
+QWidget#OverviewPage {
+    background-color: #0d0d0d;
+}
+QScrollArea, 
+QScrollArea QWidget,
+QAbstractScrollArea,
+QAbstractScrollArea QWidget,
+QStackedWidget,
+QStackedWidget QWidget {
+    background-color: #0d0d0d;
+    color: white;
+    border: none;
+}
+* {
+    background-color: #0d0d0d;
+    color: white;
+}
+
+QWidget {
+    background-color: #0d0d0d;
+    color: white;
+}
+
+QWidget::item {
+    background-color: #0d0d0d;
+}
+
+QAbstractItemView {
+    background-color: #0d0d0d;
+    color: white;
+}
+
+QAbstractItemView::item {
+    background-color: #0d0d0d;
+    color: white;
+}
+
+QListView {
+    background-color: #0d0d0d;
+}
+
+QListView::viewport {
+    background-color: #0d0d0d;
+}
+
+QTableView {
+    background-color: #0d0d0d;
+}
+
+QTreeView {
+    background-color: #0d0d0d;
+}

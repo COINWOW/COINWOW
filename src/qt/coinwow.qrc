@@ -46,6 +46,7 @@
         <file alias="proxy">res/icons/proxy.png</file>
     </qresource>
     <qresource prefix="/animation">
+
         <file alias="spinner-000">res/animation/spinner-000.png</file>
         <file alias="spinner-001">res/animation/spinner-001.png</file>
         <file alias="spinner-002">res/animation/spinner-002.png</file>

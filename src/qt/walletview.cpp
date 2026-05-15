@@ -44,7 +44,7 @@ WalletView::WalletView(WalletModel* wallet_model, const PlatformStyle* _platform
 
     // Create tabs
     overviewPage = new OverviewPage(platformStyle);
-    overviewPage->setWalletModel(walletModel);
+overviewPage->setWalletModel(walletModel);
 
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();

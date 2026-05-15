@@ -11,6 +11,7 @@
 #include <coinwow-build-config.h> // IWYU pragma: keep
 
 #include <qt/coinwow.h>
+#include <QFile>
 
 #include <chainparams.h>
 #include <common/args.h>
