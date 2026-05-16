@@ -133,7 +133,7 @@ consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000
         pchMessageStart[1] = 0x0f;
         pchMessageStart[2] = 0xe3;
         pchMessageStart[3] = 0xa9;
-        nDefaultPort = 9333;
+        nDefaultPort = 19444;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 720;
         m_assumed_chain_state_size = 14;
@@ -158,7 +158,8 @@ assert(genesis.hashMerkleRoot == uint256{"6c18b005f11540a0484181be1e1011503bc38a
 
         bech32_hrp = "cw";
 
-        vFixedSeeds.clear();
+vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
+
 
         fDefaultConsistencyChecks = false;
         m_is_mockable_chain = false;
