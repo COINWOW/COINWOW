@@ -99,7 +99,7 @@ public:
         consensus.SegwitHeight = 0; // COINWOW: SegWit actif dès le départ // 0000000000000000001c8018d9cb3b742ef25114f27563e3fc4a1902167f9893
         consensus.MinBIP9WarningHeight = 0; // segwit activation height + miner confirmation window
         consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
-        consensus.nPowTargetTimespan = 24 * 60 * 60; // COINWOW: retarget chaque 1 jour
+        consensus.nPowTargetTimespan = 2016 * 60; // COINWOW: retarget chaque 2016 blocs à 1 min
         consensus.nPowTargetSpacing = 60; // COINWOW: 1 bloc par minute
         consensus.fPowNoRetargeting = false;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
