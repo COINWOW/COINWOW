@@ -86,7 +86,7 @@ public:
         m_chain_type = ChainType::MAIN;
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
-        consensus.nSubsidyHalvingInterval = 210000;
+        consensus.nSubsidyHalvingInterval = 200000;
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256{"00000000000002dc756eebf4f49723ed8d30cc28a5f108eb94b1ba88ac4f9c22"}, SCRIPT_VERIFY_NONE);
         consensus.script_flag_exceptions.emplace( // Taproot exception
@@ -133,7 +133,7 @@ consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000
         pchMessageStart[1] = 0x0f;
         pchMessageStart[2] = 0xe3;
         pchMessageStart[3] = 0xa9;
-        nDefaultPort = 29444;
+        nDefaultPort = 51445;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 720;
         m_assumed_chain_state_size = 14;
