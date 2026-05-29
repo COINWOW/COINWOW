@@ -133,10 +133,6 @@ static RPCHelpMan getnetworkhashps()
                 },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
-    if (!Params().MineBlocksOnDemand()) {
-        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "generatetoaddress disabled on mainnet");
-    }
-
     ChainstateManager& chainman = EnsureAnyChainman(request.context);
     LOCK(cs_main);
     return GetNetworkHashPS(self.Arg<int>("nblocks"), self.Arg<int>("height"), chainman.ActiveChain());
@@ -295,6 +291,10 @@ static RPCHelpMan generatetoaddress()
                 },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
+    if (!Params().MineBlocksOnDemand()) {
+        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "CPU mining disabled on mainnet");
+    }
+
     const int num_blocks{request.params[0].getInt<int>()};
     const uint64_t max_tries{request.params[2].isNull() ? DEFAULT_MAX_TRIES : request.params[2].getInt<int>()};
 
