@@ -174,9 +174,6 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock&& block, uint64_t&
 
 static UniValue generateBlocks(ChainstateManager& chainman, Mining& miner, const CScript& coinbase_output_script, int nGenerate, uint64_t nMaxTries)
 {
-    if (!Params().MineBlocksOnDemand()) {
-        throw JSONRPCError(RPC_METHOD_NOT_FOUND, "CPU mining disabled on mainnet");
-    }
 
     UniValue blockHashes(UniValue::VARR);
     while (nGenerate > 0 && !chainman.m_interrupt) {
