@@ -26,3 +26,4 @@ wallets/
 .vscode/
 .idea/
 .DS_Store
+build-win/
