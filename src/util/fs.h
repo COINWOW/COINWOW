@@ -166,7 +166,7 @@ static inline std::string PathToString(const path& path)
     // POSIX, u8string/utf8string/u8path functions are not safe to use because paths are
     // not always valid UTF-8, so plain string methods which do not transform
     // the path there are used.
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
     return path.utf8string();
 #else
     static_assert(std::is_same_v<path::string_type, std::string>, "PathToString not implemented on this platform");
@@ -179,7 +179,7 @@ static inline std::string PathToString(const path& path)
  */
 static inline path PathFromString(const std::string& string)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
     return u8path(string);
 #else
     return std::filesystem::path(string);
