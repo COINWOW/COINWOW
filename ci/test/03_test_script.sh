@@ -60,8 +60,8 @@ if [ "$RUN_FUZZ_TESTS" = "true" ]; then
   export DIR_FUZZ_IN=${DIR_QA_ASSETS}/fuzz_corpora/
   if [ ! -d "$DIR_FUZZ_IN" ]; then
     ${CI_RETRY_EXE} git clone --depth=1 https://github.com/COINWOW/qa-assets "${DIR_QA_ASSETS}"
-  rm -rf "${DIR_FUZZ_IN}/coincontrol"
   fi
+  rm -rf "${DIR_FUZZ_IN}/coincontrol"
   (
     cd "${DIR_QA_ASSETS}"
     echo "Using qa-assets repo from commit ..."
