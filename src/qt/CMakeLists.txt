@@ -262,7 +262,7 @@ target_link_libraries(coinwow-qt
   core_interface
   coinwowqt
   coinwow_node
-  Shlwapi
+  $<$<PLATFORM_ID:Windows>:Shlwapi>
 )
 
 import_plugins(coinwow-qt)

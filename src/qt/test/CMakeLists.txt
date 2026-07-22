@@ -21,7 +21,7 @@ target_link_libraries(test_coinwow-qt
   coinwow_node
   Boost::headers
   Qt6::Test
-  Shlwapi
+  $<$<PLATFORM_ID:Windows>:Shlwapi>
 )
 
 import_plugins(test_coinwow-qt)
