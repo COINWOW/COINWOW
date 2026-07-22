@@ -338,7 +338,7 @@ public:
         m_assumed_blockchain_size = 11;
         m_assumed_chain_state_size = 1;
 
-        const char* testnet4_genesis_msg = "03/May/2024 000000000000000000001ebd58c244970b3aa9d783bb001011fbe8ea8e98e00e";
+        [[maybe_unused]] const char* testnet4_genesis_msg = "03/May/2024 000000000000000000001ebd58c244970b3aa9d783bb001011fbe8ea8e98e00e";
         genesis = CreateGenesisBlock(1754491428, 0, 0x207fffff, 1, 7000000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         //std::cout << "[TESTNET4] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
