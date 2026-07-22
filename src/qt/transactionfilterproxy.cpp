@@ -81,12 +81,14 @@ void TransactionFilterProxy::setTypeFilter(quint32 modes)
 
 void TransactionFilterProxy::setMinAmount(const CAmount& minimum)
 {
+    beginFilterChange();
     this->minAmount = minimum;
-    invalidateFilter();
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
 }
 
 void TransactionFilterProxy::setShowInactive(bool _showInactive)
 {
+    beginFilterChange();
     this->showInactive = _showInactive;
-    invalidateFilter();
+    endFilterChange(QSortFilterProxyModel::Direction::Rows);
 }
