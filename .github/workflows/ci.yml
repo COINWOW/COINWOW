@@ -150,7 +150,33 @@ jobs:
         run: ./ci/test_run_all.sh
         env:
           FILE_ENV: ${{ matrix.file-env }}
+      - name: Dump all debug.log files on failure (fuzz)
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+          echo "== Searching for debug.log under ci/scratch =="
 
+          find "$GITHUB_WORKSPACE/ci/scratch" -type f -name debug.log | while read LOGFILE; do
+            echo ""
+            echo "=================================================="
+            echo "FILE: $LOGFILE"
+            echo "=================================================="
+            tail -n 400 "$LOGFILE"
+          done
+
+      - name: Upload fuzz debug artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-arm64-fuzz-debug-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          retention-days: 7
+          path: |
+            ci/scratch/**/debug.log
+            ci/scratch/**/blocks/index/**
+            ci/scratch/**/blocks/blk*.dat
+            ci/scratch/**/blocks/rev*.dat
       - name: Save Ccache cache
         uses: actions/cache/save@v4
         if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
