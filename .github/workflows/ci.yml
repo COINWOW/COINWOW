@@ -146,10 +146,105 @@ jobs:
           key: ${{ github.job }}-${{ matrix.job-type }}-ccache-${{ github.run_id }}
           restore-keys: ${{ github.job }}-${{ matrix.job-type }}-ccache-
 
+      - name: "[DIAG] Fuzz diagnostics - pre-run marker"
+        if: matrix.job-type == 'fuzz'
+        shell: bash
+        run: |
+          set +e
+
+          DIAG_DIR="${{ github.workspace }}/ci-fuzz-diagnostics"
+          mkdir -p "$DIAG_DIR"
+
+          touch "$DIAG_DIR/marker-before-ci-script.txt"
+
+          {
+            echo "Horodatage (UTC) : $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo ""
+            echo "TMPDIR=${TMPDIR:-<non défini>}"
+            echo ""
+            echo "--- Variables d'environnement liées aux répertoires temporaires/travail ---"
+            env | grep -iE 'tmp|temp|runner_temp|runner_workspace|github_workspace|datadir|scratch' | sort
+          } > "$DIAG_DIR/env-before-ci-script.txt" 2>&1
+
+          echo "[DIAG] Dossier et marqueur pré-run créés dans $DIAG_DIR"
+          exit 0
+
       - name: CI script
         run: ./ci/test_run_all.sh
         env:
           FILE_ENV: ${{ matrix.file-env }}
+
+      - name: "[DIAG] Fuzz diagnostics - post-run search & copy"
+        if: always() && matrix.job-type == 'fuzz'
+        shell: bash
+        run: |
+          set +e
+
+          DIAG_DIR="${{ github.workspace }}/ci-fuzz-diagnostics"
+          mkdir -p "$DIAG_DIR/found-files"
+          MARKER="$DIAG_DIR/marker-before-ci-script.txt"
+          [ -f "$MARKER" ] || touch "$MARKER"
+
+          {
+            echo "TMPDIR=${TMPDIR:-<non défini>}"
+            echo ""
+            env | grep -iE 'tmp|temp|runner_temp|runner_workspace|github_workspace|datadir|scratch' | sort
+          } > "$DIAG_DIR/env-after-ci-script.txt" 2>&1
+
+          SEARCH_ROOTS=(
+            "${TMPDIR:-/tmp}"
+            "${RUNNER_TEMP:-}"
+            "${RUNNER_WORKSPACE:-}"
+            "/Users/runner/work"
+          )
+
+          : > "$DIAG_DIR/find-results.txt"
+          for ROOT in "${SEARCH_ROOTS[@]}"; do
+            [ -z "$ROOT" ] && continue
+            echo "----- Racine: $ROOT -----" >> "$DIAG_DIR/find-results.txt"
+            if [ ! -d "$ROOT" ]; then
+              echo "(introuvable)" >> "$DIAG_DIR/find-results.txt"
+              continue
+            fi
+            find "$ROOT" \
+              \( -iname "debug.log" -o -iname "blk*.dat" -o -iname "rev*.dat" -o -path "*blocks/index*" \) \
+              2>/dev/null >> "$DIAG_DIR/find-results.txt"
+          done
+
+          : > "$DIAG_DIR/recently-modified-dirs.txt"
+          for ROOT in "${SEARCH_ROOTS[@]}"; do
+            [ -z "$ROOT" ] && continue
+            [ -d "$ROOT" ] || continue
+            echo "----- Racine: $ROOT -----" >> "$DIAG_DIR/recently-modified-dirs.txt"
+            find "$ROOT" -type d -newer "$MARKER" 2>/dev/null >> "$DIAG_DIR/recently-modified-dirs.txt"
+          done
+
+          FOUND=$(grep -v '^-----' "$DIAG_DIR/find-results.txt" | grep -Fv '(introuvable)')
+
+          : > "$DIAG_DIR/found-files-detailed-listing.txt"
+          if [ -n "$FOUND" ]; then
+            echo "$FOUND" | while IFS= read -r f; do
+              [ -e "$f" ] && ls -la "$f" >> "$DIAG_DIR/found-files-detailed-listing.txt"
+              if [ -f "$f" ]; then
+                # chemin d'origine préservé sous found-files/, pas de copy à plat
+                dest="$DIAG_DIR/found-files/${f#/}"
+                mkdir -p "$(dirname "$dest")"
+                cp -p "$f" "$dest" 2>/dev/null
+              fi
+            done
+          fi
+
+          exit 0
+
+      - name: "[DIAG] Upload fuzz diagnostics"
+        if: always() && matrix.job-type == 'fuzz'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-fuzz-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/ci-fuzz-diagnostics
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Save Ccache cache
         uses: actions/cache/save@v4
