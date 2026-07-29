@@ -515,7 +515,7 @@ public:
         consensus.CSVHeight = 1;    // Always active unless overridden
         consensus.SegwitHeight = 0; // Always active unless overridden
         consensus.MinBIP9WarningHeight = 0;
-        consensus.powLimit = uint256{"0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        consensus.powLimit = uint256{"7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 24 * 60 * 60; // one day
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -573,7 +573,7 @@ public:
             consensus.vDeployments[deployment_pos].nTimeout = version_bits_params.timeout;
             consensus.vDeployments[deployment_pos].min_activation_height = version_bits_params.min_activation_height;
         }
-        genesis = CreateGenesisBlock(1754491628, 0, 0x207fffff, 1, 7000000 * COIN);
+        genesis = CreateGenesisBlock(1754491628, 1, 0x207fffff, 1, 7000000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         //std::cout << "[SIGNET] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
         //std::cout << "[SIGNET] Merkle root computed: " << genesis.hashMerkleRoot.ToString() << std::endl;
