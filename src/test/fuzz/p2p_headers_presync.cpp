@@ -165,6 +165,7 @@ void initialize()
     static auto setup{
         MakeNoLogFileContext<HeadersSyncSetup>(ChainType::MAIN,
                                                {
+                                                   .extra_args = {"-minimumchainwork=0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
                                                    .setup_validation_interface = false,
                                                }),
     };
