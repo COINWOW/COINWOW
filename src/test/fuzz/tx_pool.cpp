@@ -213,7 +213,10 @@ FUZZ_TARGET(tx_pool_standard, .init = initialize_tx_pool)
     outpoints_rbf = outpoints_supply;
 
     // The sum of the values of all spendable outpoints
-    constexpr CAmount SUPPLY_TOTAL{COINBASE_MATURITY * 50 * COIN};
+    CAmount SUPPLY_TOTAL{0};
+    for (int height = 1; height <= COINBASE_MATURITY; ++height) {
+        SUPPLY_TOTAL += GetBlockSubsidy(height, node.chainman->GetConsensus());
+    }
 
     SetMempoolConstraints(*node.args, fuzzed_data_provider);
     auto tx_pool_{MakeMempool(fuzzed_data_provider, node)};
