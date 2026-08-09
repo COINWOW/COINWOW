@@ -53,7 +53,8 @@ FUZZ_TARGET(process_messages, .init = initialize_process_messages)
 
     ConnmanTestMsg& connman = *static_cast<ConnmanTestMsg*>(g_setup->m_node.connman.get());
     auto& chainman = static_cast<TestChainstateManager&>(*g_setup->m_node.chainman);
-    SetMockTime(chainman.ActiveChain().Tip()->GetBlockTime() + 24 * 60 * 60 + 1);
+    const auto tip_time = WITH_LOCK(cs_main, return chainman.ActiveChain().Tip()->GetBlockTime());
+    SetMockTime(tip_time + 24 * 60 * 60 + 1);
     chainman.ResetIbd();
 
     LOCK(NetEventsInterface::g_msgproc_mutex);
