@@ -598,9 +598,9 @@ public:
             {
                 // For use by fuzz target src/test/fuzz/utxo_snapshot.cpp
                 .height = 200,
-                .hash_serialized = AssumeutxoHash{uint256{"17dcc016d188d16068907cdeb38b75691a118d43053b8cd6a25969419381d13a"}},
+                .hash_serialized = AssumeutxoHash{uint256{"c2321d760b87e4fc529b24b5dc057529000b4e09973425256c4af242e09fb253"}},
                 .m_chain_tx_count = 201,
-                .blockhash = consteval_ctor(uint256{"385901ccbd69dff6bbd00065d01fb8a9e464dede7cfe0372443884f9b1dcf6b9"}),
+                .blockhash = consteval_ctor(uint256{"70be1c364f89c3039f216752751eaf1ff566b8768796d78d0a144786559eaac3"}),
             },
             {
                 // For use by test/functional/feature_assumeutxo.py
