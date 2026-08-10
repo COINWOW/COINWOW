@@ -165,8 +165,8 @@ void initialize()
     static auto setup{
         MakeNoLogFileContext<HeadersSyncSetup>(ChainType::MAIN,
                                                {
-                                                   .minimum_chain_work = UintToArith256(uint256{"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}),
                                                    .setup_validation_interface = false,
+                                                   .minimum_chain_work = UintToArith256(uint256{"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}),
                                                }),
     };
     g_testing_setup = setup.get();
