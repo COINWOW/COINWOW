@@ -8,6 +8,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <cstdio>
 #include <chain.h>
 #include <chainparams.h>
 #include <coins.h>
@@ -66,6 +67,12 @@ void sanity_check_snapshot()
     cs.ForceFlushStateToDisk();
     const auto stats{*Assert(kernel::ComputeUTXOStats(kernel::CoinStatsHashType::HASH_SERIALIZED, &cs.CoinsDB(), node.chainman->m_blockman))};
     const auto cp_au_data{*Assert(node.chainman->GetParams().AssumeutxoForHeight(2 * COINBASE_MATURITY))};
+    std::fprintf(stderr,
+        "ASSUMEUTXO_DEBUG height=%d blockhash=%s hash_serialized=%s chain_tx_count=%llu\n",
+        stats.nHeight,
+        stats.hashBlock.ToString().c_str(),
+        stats.hashSerialized.ToString().c_str(),
+        static_cast<unsigned long long>(stats.nTransactions + 1));
     Assert(stats.nHeight == cp_au_data.height);
     Assert(stats.nTransactions + 1 == cp_au_data.m_chain_tx_count); // +1 for the genesis tx.
     Assert(stats.hashBlock == cp_au_data.blockhash);
