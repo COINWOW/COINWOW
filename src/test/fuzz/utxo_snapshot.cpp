@@ -8,7 +8,6 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <cstdio>
 #include <chain.h>
 #include <chainparams.h>
 #include <coins.h>
@@ -96,12 +95,6 @@ void initialize_chain()
         for (const auto& block : chain) {
             BlockValidationState dummy;
             bool processed{chainman.ProcessNewBlockHeaders({{block->GetBlockHeader()}}, true, dummy)};
-            if (!processed) {
-                std::fprintf(stderr,
-                    "UTXO_HEADER_DEBUG hash=%s state=%s\n",
-                    block->GetHash().ToString().c_str(),
-                    dummy.ToString().c_str());
-            }
             Assert(processed);
             const auto* index{WITH_LOCK(::cs_main, return chainman.m_blockman.LookupBlockIndex(block->GetHash()))};
             Assert(index);
@@ -186,12 +179,6 @@ void utxo_snapshot_fuzz(FuzzBufferType buffer)
             for (const auto& block : *g_chain) {
                 BlockValidationState dummy;
                 bool processed{chainman.ProcessNewBlockHeaders({{block->GetBlockHeader()}}, true, dummy)};
-                if (!processed) {
-                    std::fprintf(stderr,
-                        "UTXO_HEADER_DEBUG hash=%s state=%s\n",
-                        block->GetHash().ToString().c_str(),
-                        dummy.ToString().c_str());
-                }
                 Assert(processed);
                 const auto* index{WITH_LOCK(::cs_main, return chainman.m_blockman.LookupBlockIndex(block->GetHash()))};
                 Assert(index);
