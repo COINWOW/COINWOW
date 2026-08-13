@@ -1947,7 +1947,7 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate& active_chainstate, CTxM
 // src/validation.cpp
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-    int halvings = nHeight / 200000;
+    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
 
     if (halvings >= 64)
         return 0;
