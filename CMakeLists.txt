@@ -128,7 +128,6 @@ option(REDUCE_EXPORTS "Attempt to reduce exported symbols in the resulting execu
 option(WERROR "Treat compiler warnings as errors." OFF)
 option(WITH_CCACHE "Attempt to use ccache for compiling." ON)
 
-find_package(OpenSSL REQUIRED)
 
 option(WITH_ZMQ "Enable ZMQ notifications." OFF)
 if(WITH_ZMQ)
@@ -722,5 +721,5 @@ endif()
 # We want all build properties to be encapsulated properly.
 include(WarnAboutGlobalProperties)
 add_executable(genesis_miner src/genesis_miner.cpp)
-target_link_libraries(genesis_miner bitcoinkernel coinwow_consensus OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(genesis_miner bitcoinkernel coinwow_consensus)
 
