@@ -36,7 +36,6 @@
 #ifdef WIN32
 #include <shellapi.h>
 #include <shlobj.h>
-#include <shlwapi.h>
 #endif
 
 #include <QAbstractButton>
@@ -564,8 +563,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 
             // Set the path to the shortcut target
             psl->SetPath(pszExePath);
-            PathRemoveFileSpecW(pszExePath);
-            psl->SetWorkingDirectory(pszExePath);
+            const fs::path exe_path{pszExePath};
+            psl->SetWorkingDirectory(exe_path.parent_path().c_str());
             psl->SetShowCmd(SW_SHOWMINNOACTIVE);
             psl->SetArguments(strArgs.toStdWString().c_str());
 

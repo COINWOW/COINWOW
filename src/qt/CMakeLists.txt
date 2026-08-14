@@ -143,7 +143,6 @@ target_link_libraries(coinwowqt
     Boost::headers
     $<TARGET_NAME_IF_EXISTS:QRencode::QRencode>
     $<$<PLATFORM_ID:Darwin>:-framework\ AppKit>
-    $<$<CXX_COMPILER_ID:MSVC>:shlwapi>
 )
 
 if(ENABLE_WALLET)
@@ -262,7 +261,6 @@ target_link_libraries(coinwow-qt
   core_interface
   coinwowqt
   coinwow_node
-  $<$<PLATFORM_ID:Windows>:Shlwapi>
 )
 
 import_plugins(coinwow-qt)
