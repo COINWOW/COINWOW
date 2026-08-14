@@ -605,9 +605,9 @@ public:
             {
                 // For use by test/functional/feature_assumeutxo.py
                 .height = 299,
-                .hash_serialized = AssumeutxoHash{uint256{"d2b051ff5e8eef46520350776f4100dd710a63447a8e01d917e92e79751a63e2"}},
+                .hash_serialized = AssumeutxoHash{uint256{"2b6571bf7acb59b57336eab19ec601a5afcbfe0232827a27f36ca570c540c731"}},
                 .m_chain_tx_count = 334,
-                .blockhash = consteval_ctor(uint256{"7cc695046fec709f8c9394b6f928f81e81fd3ac20977bb68760fa1faa7916ea2"}),
+                .blockhash = consteval_ctor(uint256{"2bdc6c61a87576e003069dcd4dc893f173b9eebed56fb25914a307e3f969486c"}),
             },
         };
 
