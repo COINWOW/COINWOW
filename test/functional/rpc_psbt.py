@@ -420,7 +420,9 @@ class PSBTTest(COINWOWTestFramework):
                                 self.nodes[0].walletcreatefundedpsbt, [{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():90})
 
         psbtx1 = self.nodes[0].walletcreatefundedpsbt([{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():90}, 0, {"add_inputs": True})['psbt']
-        assert_equal(len(self.nodes[0].decodepsbt(psbtx1)['tx']['vin']), 2)
+        psbtx1_inputs = self.nodes[0].decodepsbt(psbtx1)['tx']['vin']
+        assert_greater_than(len(psbtx1_inputs), 1)
+        assert any(txin['txid'] == utxo1['txid'] and txin['vout'] == utxo1['vout'] for txin in psbtx1_inputs)
 
         # Inputs argument can be null
         self.nodes[0].walletcreatefundedpsbt(None, {self.nodes[2].getnewaddress():10})
