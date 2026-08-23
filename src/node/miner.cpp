@@ -175,15 +175,8 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock()
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
     Assert(nHeight > 0);
     coinbaseTx.nLockTime = static_cast<uint32_t>(nHeight - 1);
- pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
-    if (DeploymentActiveAfter(pindexPrev, m_chainstate.m_chainman, Consensus::DEPLOYMENT_SEGWIT)) {
-        pblocktemplate->vchCoinbaseCommitment = m_chainstate.m_chainman.GenerateCoinbaseCommitment(*pblock, pindexPrev);
-    } else {
-        CMutableTransaction no_witness_tx{*pblock->vtx[0]};
-        no_witness_tx.vin[0].scriptWitness.stack.clear();
-        pblock->vtx[0] = MakeTransactionRef(std::move(no_witness_tx));
-        pblocktemplate->vchCoinbaseCommitment.clear();
-    }
+    pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
+    pblocktemplate->vchCoinbaseCommitment = m_chainstate.m_chainman.GenerateCoinbaseCommitment(*pblock, pindexPrev);
 
     LogPrintf("CreateNewBlock(): block weight: %u txs: %u fees: %ld sigops %d\n", GetBlockWeight(*pblock), nBlockTx, nFees, nBlockSigOpsCost);
     // Fill in header
