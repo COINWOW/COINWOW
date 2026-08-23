@@ -15,6 +15,8 @@
 #include <test/util/setup_common.h>
 #include <util/chaintype.h>
 
+#include <vector>
+
 #include <boost/test/unit_test.hpp>
 
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
@@ -88,6 +90,41 @@ BOOST_AUTO_TEST_CASE(get_next_work_upper_limit_actual)
     // Test that increasing nbits further would not be a PermittedDifficultyTransition.
     unsigned int invalid_nbits = expected_nbits+1;
     BOOST_CHECK(!PermittedDifficultyTransition(chainParams->GetConsensus(), pindexLast.nHeight+1, pindexLast.nBits, invalid_nbits));
+}
+
+/* Test that GetNextWorkRequired() correctly walks the chain back to the
+ * genesis block for the very first difficulty adjustment period. The
+ * CalculateNextWorkRequired() tests above all bypass this lookup by passing
+ * nFirstBlockTime directly; this is the one code path (CBlockIndex::GetAncestor
+ * finding height 0) they never exercise. Mirrors the scenario in
+ * test/functional/mining_mainnet.py (genesis-anchored, 12s/block cadence,
+ * clamped to the maximum permitted x4 difficulty increase) without requiring
+ * any real proof-of-work. */
+BOOST_AUTO_TEST_CASE(get_next_work_first_period_from_genesis)
+{
+    const auto chainParams = CreateChainParams(*m_node.args, ChainType::MAIN);
+    const Consensus::Params& params = chainParams->GetConsensus();
+
+    std::vector<CBlockIndex> chain(2016);
+    chain[0].nHeight = 0;
+    chain[0].nTime = chainParams->GenesisBlock().nTime;
+    chain[0].nBits = 0x1d00ffff;
+    for (int i = 1; i < 2016; i++) {
+        chain[i].nHeight = i;
+        chain[i].nTime = chain[0].nTime + i * 12;
+        chain[i].nBits = 0x1d00ffff;
+        chain[i].pprev = &chain[i - 1];
+    }
+
+    CBlockHeader next_header;
+    next_header.nTime = chain[2015].nTime + 12;
+    unsigned int next_bits = GetNextWorkRequired(&chain[2015], &next_header, params);
+
+    arith_uint256 expected_target;
+    expected_target.SetCompact(0x1d00ffff);
+    expected_target /= 4;
+    BOOST_CHECK_EQUAL(next_bits, expected_target.GetCompact());
+    BOOST_CHECK(PermittedDifficultyTransition(params, 2016, 0x1d00ffff, next_bits));
 }
 
 BOOST_AUTO_TEST_CASE(CheckProofOfWork_test_negative_target)

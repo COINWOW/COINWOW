@@ -2,6 +2,23 @@
 
 ## mainnet_alt.json
 
+> **Status (COINWOW): historical, unused.** This fixture was generated
+> against Bitcoin's historical mainnet genesis and consensus parameters (see
+> the recipe below, anchored at `1231006505`, Bitcoin's real genesis
+> timestamp). It is **incompatible with COINWOW's own mainnet genesis**: each
+> stored nonce was ground against a specific 80-byte header that includes
+> `hashPrevBlock`, so substituting COINWOW's genesis/chain hash invalidates
+> every nonce in the chain (each block's proof-of-work depends on the exact
+> hash of the block before it). The file is kept here as historical
+> reference only and is **no longer read by `mining_mainnet.py`**. COINWOW's
+> equivalent coverage is now split between `test/functional/mining_mainnet.py`
+> (genesis difficulty/bits/target and next-block reporting via
+> `getmininginfo`, against a live isolated mainnet-params node) and
+> `src/test/pow_tests.cpp` (`get_next_work_lower_limit_actual` for the
+> retarget clamp arithmetic, `get_next_work_first_period_from_genesis` for
+> the genesis-anchored ancestor walk) — both without requiring any real
+> proof-of-work.
+
 For easier testing the difficulty is maximally increased in the first (and only)
 retarget period, by producing blocks approximately 2 minutes apart.
 
