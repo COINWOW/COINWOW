@@ -79,7 +79,7 @@ class RejectLowDifficultyHeadersTest(COINWOWTestFramework):
             assert len(chaintips) == 1
             assert {
                 'height': 0,
-                'hash': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
+                'hash': '4cc5cbfad45e85a27e2b55219f1addcb64da8b705fad0dcafcf25eaa73172f2f',
                 'branchlen': 0,
                 'status': 'active',
             } in chaintips
@@ -91,7 +91,7 @@ class RejectLowDifficultyHeadersTest(COINWOWTestFramework):
 
         assert {
             'height': 0,
-            'hash': '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206',
+            'hash': '4cc5cbfad45e85a27e2b55219f1addcb64da8b705fad0dcafcf25eaa73172f2f',
             'branchlen': 0,
             'status': 'active',
         } in self.nodes[2].getchaintips()
