@@ -3,6 +3,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the wallet accounts properly when there are cloned transactions with malleated scriptsigs."""
+from decimal import Decimal
 
 from test_framework.test_framework import COINWOWTestFramework
 from test_framework.util import (
@@ -48,20 +49,20 @@ class TxnMallTest(COINWOWTestFramework):
         else:
             output_type = "legacy"
 
-        # All nodes should start with 1,250 CW:
-        starting_balance = 1250
+        # All nodes should start with 625 CW:
+        starting_balance = 625
         for i in range(3):
             assert_equal(self.nodes[i].getbalance(), starting_balance)
 
         self.nodes[0].settxfee(.001)
 
         node0_address1 = self.nodes[0].getnewaddress(address_type=output_type)
-        node0_utxo1 = self.create_outpoints(self.nodes[0], outputs=[{node0_address1: 1219}])[0]
+        node0_utxo1 = self.create_outpoints(self.nodes[0], outputs=[{node0_address1: Decimal('609.5')}])[0]
         node0_tx1 = self.nodes[0].gettransaction(node0_utxo1['txid'])
         self.nodes[0].lockunspent(False, [node0_utxo1])
 
         node0_address2 = self.nodes[0].getnewaddress(address_type=output_type)
-        node0_utxo2 = self.create_outpoints(self.nodes[0], outputs=[{node0_address2: 29}])[0]
+        node0_utxo2 = self.create_outpoints(self.nodes[0], outputs=[{node0_address2: Decimal('14.5')}])[0]
         node0_tx2 = self.nodes[0].gettransaction(node0_utxo2['txid'])
 
         assert_equal(self.nodes[0].getbalance(),
@@ -71,8 +72,8 @@ class TxnMallTest(COINWOWTestFramework):
         node1_address = self.nodes[1].getnewaddress()
 
         # Send tx1, and another transaction tx2 that won't be cloned
-        txid1 = self.spend_utxo(node0_utxo1, {node1_address: 40})
-        txid2 = self.spend_utxo(node0_utxo2, {node1_address: 20})
+        txid1 = self.spend_utxo(node0_utxo1, {node1_address: 20})
+        txid2 = self.spend_utxo(node0_utxo2, {node1_address: 10})
 
         # Construct a clone of tx1, to be malleated
         rawtx1 = self.nodes[0].getrawtransaction(txid1, 1)
@@ -84,7 +85,7 @@ class TxnMallTest(COINWOWTestFramework):
 
         # createrawtransaction randomizes the order of its outputs, so swap them if necessary.
         clone_tx = tx_from_hex(clone_raw)
-        if (rawtx1["vout"][0]["value"] == 40 and clone_tx.vout[0].nValue != 40*COIN or rawtx1["vout"][0]["value"] != 40 and clone_tx.vout[0].nValue == 40*COIN):
+        if (rawtx1["vout"][0]["value"] == 20 and clone_tx.vout[0].nValue != 20*COIN or rawtx1["vout"][0]["value"] != 20 and clone_tx.vout[0].nValue == 20*COIN):
             (clone_tx.vout[0], clone_tx.vout[1]) = (clone_tx.vout[1], clone_tx.vout[0])
 
         # Use a different signature hash type to sign.  This creates an equivalent but malleated clone.
@@ -99,11 +100,11 @@ class TxnMallTest(COINWOWTestFramework):
         tx1 = self.nodes[0].gettransaction(txid1)
         tx2 = self.nodes[0].gettransaction(txid2)
 
-        # Node0's balance should be starting balance, plus 50CW for another
+        # Node0's balance should be starting balance, plus 25CW for another
         # matured block, minus tx1 and tx2 amounts, and minus transaction fees:
         expected = starting_balance + node0_tx1["fee"] + node0_tx2["fee"]
         if self.options.mine_block:
-            expected += 50
+            expected += 25
         expected += tx1["amount"] + tx1["fee"]
         expected += tx2["amount"] + tx2["fee"]
         assert_equal(self.nodes[0].getbalance(), expected)
@@ -141,11 +142,11 @@ class TxnMallTest(COINWOWTestFramework):
         assert_equal(tx1_clone["confirmations"], 2)
         assert_equal(tx2["confirmations"], 1)
 
-        # Check node0's total balance; should be same as before the clone, + 100 CW for 2 matured,
+        # Check node0's total balance; should be same as before the clone, + 50 CW for 2 matured,
         # less possible orphaned matured subsidy
-        expected += 100
+        expected += 50
         if (self.options.mine_block):
-            expected -= 50
+            expected -= 25
         assert_equal(self.nodes[0].getbalance(), expected)
 
 

@@ -93,7 +93,7 @@ class MempoolAcceptanceTest(COINWOWTestFramework):
         tx = self.wallet.create_self_transfer()['tx']  # Pick a random coin(base) to spend
         tx.vout.append(deepcopy(tx.vout[0]))
         tx.vout[0].nValue = int(0.3 * COIN)
-        tx.vout[1].nValue = int(49 * COIN)
+        tx.vout[1].nValue = int(24 * COIN)
         raw_tx_in_block = tx.serialize().hex()
         txid_in_block = self.wallet.sendrawtransaction(from_node=node, tx_hex=raw_tx_in_block)
         self.generate(node, 1)
@@ -138,7 +138,7 @@ class MempoolAcceptanceTest(COINWOWTestFramework):
         tx.vout[0].nValue = int(output_amount * COIN)
         raw_tx_final = tx.serialize().hex()
         tx = tx_from_hex(raw_tx_final)
-        fee_expected = Decimal('50.0') - output_amount
+        fee_expected = Decimal('25.0') - output_amount
         self.check_mempool_result(
             result_expected=[{'txid': tx.txid_hex, 'allowed': True, 'vsize': tx.get_vsize(), 'fees': {'base': fee_expected}}],
             rawtxs=[tx.serialize().hex()],
@@ -176,7 +176,7 @@ class MempoolAcceptanceTest(COINWOWTestFramework):
 
         self.log.info('A transaction with missing inputs, that existed once in the past')
         tx = tx_from_hex(raw_tx_0)
-        tx.vin[0].prevout.n = 1  # Set vout to 1, to spend the other outpoint (49 coins) of the in-chain-tx we want to double spend
+        tx.vin[0].prevout.n = 1  # Set vout to 1, to spend the other outpoint (24 coins) of the in-chain-tx we want to double spend
         raw_tx_1 = tx.serialize().hex()
         txid_1 = node.sendrawtransaction(hexstring=raw_tx_1, maxfeerate=0)
         # Now spend both to "clearly hide" the outputs, ie. remove the coins from the utxo set by spending them

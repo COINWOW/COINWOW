@@ -70,14 +70,14 @@ class WalletTest(COINWOWTestFramework):
         self.generate(self.nodes[0], 1, sync_fun=self.no_op)
 
         balances = self.nodes[0].getbalances()
-        assert_equal(balances["mine"]["immature"], 50)
+        assert_equal(balances["mine"]["immature"], 25)
         assert_equal(balances["mine"]["trusted"], 0)
 
         self.sync_all(self.nodes[0:3])
         self.generate(self.nodes[1], COINBASE_MATURITY + 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
 
-        assert_equal(self.nodes[0].getbalance(), 50)
-        assert_equal(self.nodes[1].getbalance(), 50)
+        assert_equal(self.nodes[0].getbalance(), 25)
+        assert_equal(self.nodes[1].getbalance(), 25)
         assert_equal(self.nodes[2].getbalance(), 0)
 
         # Check that only first and second nodes have UTXOs
@@ -91,9 +91,9 @@ class WalletTest(COINWOWTestFramework):
         # First, outputs that are unspent both in the chain and in the
         # mempool should appear with or without include_mempool
         txout = self.nodes[0].gettxout(txid=confirmed_txid, n=confirmed_index, include_mempool=False)
-        assert_equal(txout['value'], 50)
+        assert_equal(txout['value'], 25)
         txout = self.nodes[0].gettxout(txid=confirmed_txid, n=confirmed_index, include_mempool=True)
-        assert_equal(txout['value'], 50)
+        assert_equal(txout['value'], 25)
 
         # Send 21 CW from 0 to 2 using sendtoaddress call.
         self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 11)
@@ -103,7 +103,7 @@ class WalletTest(COINWOWTestFramework):
         # utxo spent in mempool should be visible if you exclude mempool
         # but invisible if you include mempool
         txout = self.nodes[0].gettxout(confirmed_txid, confirmed_index, False)
-        assert_equal(txout['value'], 50)
+        assert_equal(txout['value'], 25)
         txout = self.nodes[0].gettxout(confirmed_txid, confirmed_index)  # by default include_mempool=True
         assert txout is None
         txout = self.nodes[0].gettxout(confirmed_txid, confirmed_index, True)
@@ -204,7 +204,7 @@ class WalletTest(COINWOWTestFramework):
 
         # node0 should end up with 100 btc in block rewards plus fees, but
         # minus the 21 plus fees sent to node2
-        assert_equal(self.nodes[0].getbalance(), 100 - 21)
+        assert_equal(self.nodes[0].getbalance(), 50 - 21)
         assert_equal(self.nodes[2].getbalance(), 21)
 
         # Node0 should have two unspent outputs.
@@ -231,55 +231,55 @@ class WalletTest(COINWOWTestFramework):
         self.generate(self.nodes[1], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
 
         assert_equal(self.nodes[0].getbalance(), 0)
-        assert_equal(self.nodes[2].getbalance(), 94)
+        assert_equal(self.nodes[2].getbalance(), 44)
 
         # Verify that a spent output cannot be locked anymore
         spent_0 = {"txid": node0utxos[0]["txid"], "vout": node0utxos[0]["vout"]}
         assert_raises_rpc_error(-8, "Invalid parameter, expected unspent output", self.nodes[0].lockunspent, False, [spent_0])
 
-        # Send 10 CW normal
+        # Send 5 CW normal
         address = self.nodes[0].getnewaddress("test")
         fee_per_byte = Decimal('0.001') / 1000
         self.nodes[2].settxfee(fee_per_byte * 1000)
-        txid = self.nodes[2].sendtoaddress(address, 10, "", "", False)
+        txid = self.nodes[2].sendtoaddress(address, 5, "", "", False)
         self.generate(self.nodes[2], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
-        node_2_bal = self.check_fee_amount(self.nodes[2].getbalance(), Decimal('84'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
-        assert_equal(self.nodes[0].getbalance(), Decimal('10'))
+        node_2_bal = self.check_fee_amount(self.nodes[2].getbalance(), Decimal('39'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
+        assert_equal(self.nodes[0].getbalance(), Decimal('5'))
 
-        # Send 10 CW with subtract fee from amount
-        txid = self.nodes[2].sendtoaddress(address, 10, "", "", True)
+        # Send 5 CW with subtract fee from amount
+        txid = self.nodes[2].sendtoaddress(address, 5, "", "", True)
         self.generate(self.nodes[2], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
-        node_2_bal -= Decimal('10')
+        node_2_bal -= Decimal('5')
         assert_equal(self.nodes[2].getbalance(), node_2_bal)
-        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), Decimal('20'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
+        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), Decimal('10'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
 
         self.log.info("Test sendmany")
 
-        # Sendmany 10 CW
-        txid = self.nodes[2].sendmany('', {address: 10}, 0, "", [])
+        # Sendmany 5 CW
+        txid = self.nodes[2].sendmany('', {address: 5}, 0, "", [])
         self.generate(self.nodes[2], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
-        node_0_bal += Decimal('10')
-        node_2_bal = self.check_fee_amount(self.nodes[2].getbalance(), node_2_bal - Decimal('10'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
+        node_0_bal += Decimal('5')
+        node_2_bal = self.check_fee_amount(self.nodes[2].getbalance(), node_2_bal - Decimal('5'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
         assert_equal(self.nodes[0].getbalance(), node_0_bal)
 
-        # Sendmany 10 CW with subtract fee from amount
-        txid = self.nodes[2].sendmany('', {address: 10}, 0, "", [address])
+        # Sendmany 5 CW with subtract fee from amount
+        txid = self.nodes[2].sendmany('', {address: 5}, 0, "", [address])
         self.generate(self.nodes[2], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
-        node_2_bal -= Decimal('10')
+        node_2_bal -= Decimal('5')
         assert_equal(self.nodes[2].getbalance(), node_2_bal)
-        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), node_0_bal + Decimal('10'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
+        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), node_0_bal + Decimal('5'), fee_per_byte, self.get_vsize(self.nodes[2].gettransaction(txid)['hex']))
 
-        # Sendmany 5 CW to two addresses with subtracting fee from both addresses
+        # Sendmany 2.5 CW to two addresses with subtracting fee from both addresses
         a0 = self.nodes[0].getnewaddress()
         a1 = self.nodes[0].getnewaddress()
-        txid = self.nodes[2].sendmany(dummy='', amounts={a0: 5, a1: 5}, subtractfeefrom=[a0, a1])
+        txid = self.nodes[2].sendmany(dummy='', amounts={a0: Decimal('2.5'), a1: Decimal('2.5')}, subtractfeefrom=[a0, a1])
         self.generate(self.nodes[2], 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
-        node_2_bal -= Decimal('10')
+        node_2_bal -= Decimal('5')
         assert_equal(self.nodes[2].getbalance(), node_2_bal)
         tx = self.nodes[2].gettransaction(txid)
-        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), node_0_bal + Decimal('10'), fee_per_byte, self.get_vsize(tx['hex']))
+        node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), node_0_bal + Decimal('5'), fee_per_byte, self.get_vsize(tx['hex']))
         assert_equal(self.nodes[0].getbalance(), node_0_bal)
-        expected_bal = Decimal('5') + (tx['fee'] / 2)
+        expected_bal = Decimal('2.5') + (tx['fee'] / 2)
         assert_equal(self.nodes[0].getreceivedbyaddress(a0), expected_bal)
         assert_equal(self.nodes[0].getreceivedbyaddress(a1), expected_bal)
 
@@ -349,9 +349,9 @@ class WalletTest(COINWOWTestFramework):
         # 2. hex-changed one output to 0.0
         # 3. sign and send
         # 4. check if recipient (node0) can list the zero value tx
-        usp = self.nodes[1].listunspent(query_options={'minimumAmount': '49.998'})[0]
+        usp = self.nodes[1].listunspent(query_options={'minimumAmount': '24.998'})[0]
         inputs = [{"txid": usp['txid'], "vout": usp['vout']}]
-        outputs = {self.nodes[1].getnewaddress(): 49.998, self.nodes[0].getnewaddress(): 11.11}
+        outputs = {self.nodes[1].getnewaddress(): 24.998, self.nodes[0].getnewaddress(): 11.11}
 
         raw_tx = self.nodes[1].createrawtransaction(inputs, outputs).replace("c0833842", "00000000")  # replace 11.11 with 0.0 (int32)
         signed_raw_tx = self.nodes[1].signrawtransactionwithwallet(raw_tx)
@@ -582,14 +582,14 @@ class WalletTest(COINWOWTestFramework):
 
         self.log.info("Test send* RPCs with verbose=True")
         address = self.nodes[0].getnewaddress("test")
-        txid_feeReason_one = self.nodes[2].sendtoaddress(address=address, amount=5, verbose=True)
+        txid_feeReason_one = self.nodes[2].sendtoaddress(address=address, amount=3, verbose=True)
         assert_equal(txid_feeReason_one["fee_reason"], "Fallback fee")
-        txid_feeReason_two = self.nodes[2].sendmany(dummy='', amounts={address: 5}, verbose=True)
+        txid_feeReason_two = self.nodes[2].sendmany(dummy='', amounts={address: 3}, verbose=True)
         assert_equal(txid_feeReason_two["fee_reason"], "Fallback fee")
         self.log.info("Test send* RPCs with verbose=False")
-        txid_feeReason_three = self.nodes[2].sendtoaddress(address=address, amount=5, verbose=False)
+        txid_feeReason_three = self.nodes[2].sendtoaddress(address=address, amount=3, verbose=False)
         assert_equal(self.nodes[2].gettransaction(txid_feeReason_three)['txid'], txid_feeReason_three)
-        txid_feeReason_four = self.nodes[2].sendmany(dummy='', amounts={address: 5}, verbose=False)
+        txid_feeReason_four = self.nodes[2].sendmany(dummy='', amounts={address: 3}, verbose=False)
         assert_equal(self.nodes[2].gettransaction(txid_feeReason_four)['txid'], txid_feeReason_four)
 
         self.log.info("Testing 'listunspent' outputs the parent descriptor(s) of coins")

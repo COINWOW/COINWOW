@@ -78,7 +78,7 @@ class SignRawTransactionWithKeyTest(COINWOWTestFramework):
         embedded_privkey, embedded_pubkey = generate_keypair(wif=True)
         p2sh_p2wsh_address = self.nodes[0].createmultisig(1, [embedded_pubkey.hex()], "p2sh-segwit")
         # send transaction to P2SH-P2WSH 1-of-1 multisig address
-        self.send_to_address(p2sh_p2wsh_address["address"], 49.999)
+        self.send_to_address(p2sh_p2wsh_address["address"], 24.999)
         self.generate(self.nodes[0], 1)
         # Get the UTXO info from scantxoutset
         unspent_output = self.nodes[0].scantxoutset('start', [p2sh_p2wsh_address['descriptor']])['unspents'][0]
@@ -87,7 +87,7 @@ class SignRawTransactionWithKeyTest(COINWOWTestFramework):
         unspent_output['redeemScript'] = script_to_p2wsh_script(unspent_output['witnessScript']).hex()
         assert_equal(spk, unspent_output['scriptPubKey'])
         # Now create and sign a transaction spending that output on node[0], which doesn't know the scripts or keys
-        spending_tx = self.nodes[0].createrawtransaction([unspent_output], {getnewdestination()[2]: Decimal("49.998")})
+        spending_tx = self.nodes[0].createrawtransaction([unspent_output], {getnewdestination()[2]: Decimal("24.998")})
         spending_tx_signed = self.nodes[0].signrawtransactionwithkey(spending_tx, [embedded_privkey], [unspent_output])
         self.assert_signing_completed_successfully(spending_tx_signed)
 
@@ -97,10 +97,10 @@ class SignRawTransactionWithKeyTest(COINWOWTestFramework):
 
     def keyless_signing_test(self):
         self.log.info("Test that keyless 'signing' of pay-to-anchor input succeeds")
-        [txid, vout] = self.send_to_address(p2a(), 49.999)
+        [txid, vout] = self.send_to_address(p2a(), 24.999)
         spending_tx = self.nodes[0].createrawtransaction(
             [{"txid": txid, "vout": vout}],
-            [{getnewdestination()[2]: Decimal("49.998")}])
+            [{getnewdestination()[2]: Decimal("24.998")}])
         spending_tx_signed = self.nodes[0].signrawtransactionwithkey(spending_tx, [], [])
         self.assert_signing_completed_successfully(spending_tx_signed)
         assert self.nodes[0].testmempoolaccept([spending_tx_signed["hex"]])[0]["allowed"]

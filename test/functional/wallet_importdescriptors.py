@@ -420,9 +420,9 @@ class ImportDescriptorsTest(COINWOWTestFramework):
                      address,
                      solvable=True,
                      ismine=True)
-        txid = w0.sendtoaddress(address, 49.99995540)
+        txid = w0.sendtoaddress(address, 24.99995540)
         self.generatetoaddress(self.nodes[0], 6, w0.getnewaddress())
-        tx = wpriv.createrawtransaction([{"txid": txid, "vout": 0}], {w0.getnewaddress(): 49.999})
+        tx = wpriv.createrawtransaction([{"txid": txid, "vout": 0}], {w0.getnewaddress(): 24.999})
         signed_tx = wpriv.signrawtransactionwithwallet(tx)
         w1.sendrawtransaction(signed_tx['hex'])
 
@@ -699,7 +699,7 @@ class ImportDescriptorsTest(COINWOWTestFramework):
 
         encrypted_wallet.walletpassphrase("passphrase", 99999)
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as thread:
-            with self.nodes[0].assert_debug_log(expected_msgs=["Rescan started from block 0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206... (slow variant inspecting all blocks)"], timeout=10):
+            with self.nodes[0].assert_debug_log(expected_msgs=["Rescan started from block 4cc5cbfad45e85a27e2b55219f1addcb64da8b705fad0dcafcf25eaa73172f2f... (slow variant inspecting all blocks)"], timeout=10):
                 importing = thread.submit(encrypted_wallet.importdescriptors, requests=[descriptor])
 
             # Set the passphrase timeout to 1 to test that the wallet remains unlocked during the rescan
