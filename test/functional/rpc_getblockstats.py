@@ -7,7 +7,7 @@
 # Test getblockstats rpc call
 #
 
-from test_framework.blocktools import COINBASE_MATURITY
+from test_framework.blocktools import COINBASE_MATURITY, TIME_GENESIS_BLOCK
 from test_framework.test_framework import COINWOWTestFramework
 from test_framework.util import (
     assert_equal,
@@ -33,15 +33,20 @@ class GetblockstatsTest(COINWOWTestFramework):
                             action='store', metavar='FILE',
                             help='Test data file')
 
+    def skip_test_if_missing_module(self):
+        self.skip_if_no_wallet()
+
     def set_test_params(self):
         self.num_nodes = 1
         self.setup_clean_chain = True
+        self.wallet_names = []
+        self.extra_args = [["-deprecatedrpc=settxfee"]]
 
     def get_stats(self):
         return [self.nodes[0].getblockstats(hash_or_height=self.start_height + i) for i in range(self.max_stat_pos+1)]
 
     def generate_test_data(self, filename):
-        mocktime = 1525107225
+        mocktime = TIME_GENESIS_BLOCK + 100000
         self.nodes[0].setmocktime(mocktime)
         self.nodes[0].createwallet(wallet_name='test')
         privkey = self.nodes[0].get_deterministic_priv_key().key
@@ -169,18 +174,18 @@ class GetblockstatsTest(COINWOWTestFramework):
 
         self.log.info('Test block height 0')
         genesis_stats = self.nodes[0].getblockstats(0)
-        assert_equal(genesis_stats["blockhash"], "0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206")
+        assert_equal(genesis_stats["blockhash"], "4cc5cbfad45e85a27e2b55219f1addcb64da8b705fad0dcafcf25eaa73172f2f")
         assert_equal(genesis_stats["utxo_increase"], 1)
-        assert_equal(genesis_stats["utxo_size_inc"], 117)
+        assert_equal(genesis_stats["utxo_size_inc"], 85)
         assert_equal(genesis_stats["utxo_increase_actual"], 0)
         assert_equal(genesis_stats["utxo_size_inc_actual"], 0)
 
         self.log.info('Test tip including OP_RETURN')
         tip_stats = self.nodes[0].getblockstats(tip)
         assert_equal(tip_stats["utxo_increase"], 6)
-        assert_equal(tip_stats["utxo_size_inc"], 441)
+        assert_equal(tip_stats["utxo_size_inc"], 450)
         assert_equal(tip_stats["utxo_increase_actual"], 4)
-        assert_equal(tip_stats["utxo_size_inc_actual"], 300)
+        assert_equal(tip_stats["utxo_size_inc_actual"], 309)
 
         self.log.info("Test when only header is known")
         block = self.generateblock(self.nodes[0], output="raw(55)", transactions=[], submit=False)
