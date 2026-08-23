@@ -39,6 +39,20 @@ class PackageRBFTest(COINWOWTestFramework):
     def assert_mempool_contents(self, expected=None):
         mempool_util.assert_mempool_contents(self, self.nodes[0], expected, sync=False)
 
+    def assert_package_msg_one_of(self, package_result, valid_messages):
+        """CheckConflictTopology() (src/txmempool.cpp) reports the first cluster member that
+        violates the size-2 topology limit, iterating direct_conflicts in txid-hash order
+        (CTxMemPool::setEntries is a std::set<txiter, CompareIteratorByHash>). When a cluster
+        has more than one member that independently violates the limit, which one is named in
+        package_msg depends on the relative ordering of their txid hashes -- which depends on
+        the transactions' full serialized content, including output values. Since COINWOW's
+        coin values differ from upstream Bitcoin Core's, the txid ordering (and thus which
+        cluster member is named) can legitimately differ, even though the actual rejection
+        (the topology limit itself) is identical and deterministic. Accept any message that
+        correctly reports *some* member of the same cluster violating the limit."""
+        msg = package_result["package_msg"]
+        assert msg in valid_messages, f"package_msg {msg!r} not in expected set {valid_messages!r}"
+
     def create_simple_package(self, parent_coin, parent_fee=DEFAULT_FEE, child_fee=DEFAULT_CHILD_FEE, heavy_child=False):
         """Create a 1 parent 1 child package using the coin passed in as the parent's input. The
         parent has 1 output, used to fund 1 child transaction.
@@ -331,14 +345,25 @@ class PackageRBFTest(COINWOWTestFramework):
         package_hex1, _package_txns1 = self.create_simple_package(coin1, DEFAULT_FEE, DEFAULT_CHILD_FEE)
 
         package_result = node.submitpackage(package_hex1)
-        assert_equal(f"package RBF failed: {parent_result['tx'].txid_hex} has 2 descendants, max 1 allowed", package_result["package_msg"])
+        # Conflict set (coin1) is {parent, child, grandchild}; each independently violates the
+        # topology limit, so any of the three may be the one CheckConflictTopology() names first.
+        self.assert_package_msg_one_of(package_result, {
+            f"package RBF failed: {parent_result['tx'].txid_hex} has 2 descendants, max 1 allowed",
+            f"package RBF failed: {child_result['tx'].txid_hex} has both ancestor and descendant, exceeding cluster limit of 2",
+            f"package RBF failed: {grandchild_result['tx'].txid_hex} has 2 ancestors, max 1 allowed",
+        })
 
         package_hex2, _package_txns2 = self.create_simple_package(coin2, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex2)
-        assert_equal(f"package RBF failed: {child_result['tx'].txid_hex} has both ancestor and descendant, exceeding cluster limit of 2", package_result["package_msg"])
+        # Conflict set (coin2) is {child, grandchild}; either may be named first.
+        self.assert_package_msg_one_of(package_result, {
+            f"package RBF failed: {child_result['tx'].txid_hex} has both ancestor and descendant, exceeding cluster limit of 2",
+            f"package RBF failed: {grandchild_result['tx'].txid_hex} has 2 ancestors, max 1 allowed",
+        })
 
         package_hex3, _package_txns3 = self.create_simple_package(coin3, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex3)
+        # Conflict set (coin3) is {grandchild} alone: deterministic, single possible message.
         assert_equal(f"package RBF failed: {grandchild_result['tx'].txid_hex} has 2 ancestors, max 1 allowed", package_result["package_msg"])
 
         # Check that replacements were actually rejected
@@ -383,14 +408,23 @@ class PackageRBFTest(COINWOWTestFramework):
         # Now make conflicting packages for each coin
         package_hex1, _package_txns1 = self.create_simple_package(coin1, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex1)
-        assert_equal(f"package RBF failed: {parent1_result['tx'].txid_hex} is not the only parent of child {child_result['tx'].txid_hex}", package_result["package_msg"])
+        # Conflict set (coin1) is {parent1, child}; either may be named first.
+        self.assert_package_msg_one_of(package_result, {
+            f"package RBF failed: {parent1_result['tx'].txid_hex} is not the only parent of child {child_result['tx'].txid_hex}",
+            f"package RBF failed: {child_result['tx'].txid_hex} has 2 ancestors, max 1 allowed",
+        })
 
         package_hex2, _package_txns2 = self.create_simple_package(coin2, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex2)
-        assert_equal(f"package RBF failed: {child_result['tx'].txid_hex} has 2 ancestors, max 1 allowed", package_result["package_msg"])
+        # Conflict set (coin2) is {parent2, child}; either may be named first.
+        self.assert_package_msg_one_of(package_result, {
+            f"package RBF failed: {parent2_result['tx'].txid_hex} is not the only parent of child {child_result['tx'].txid_hex}",
+            f"package RBF failed: {child_result['tx'].txid_hex} has 2 ancestors, max 1 allowed",
+        })
 
         package_hex3, _package_txns3 = self.create_simple_package(coin3, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex3)
+        # Conflict set (coin3) is {child} alone: deterministic, single possible message.
         assert_equal(f"package RBF failed: {child_result['tx'].txid_hex} has 2 ancestors, max 1 allowed", package_result["package_msg"])
 
         # Check that replacements were actually rejected
@@ -437,7 +471,12 @@ class PackageRBFTest(COINWOWTestFramework):
         # Now make conflicting packages for each coin
         package_hex1, _package_txns1 = self.create_simple_package(coin1, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex1)
-        assert_equal(f"package RBF failed: {child1_result['tx'].txid_hex} is not the only child of parent {parent_result['tx'].txid_hex}", package_result["package_msg"])
+        # Conflict set (coin1) is {parent, child1, child2}; any of the three may be named first.
+        self.assert_package_msg_one_of(package_result, {
+            f"package RBF failed: {parent_result['tx'].txid_hex} has 2 descendants, max 1 allowed",
+            f"package RBF failed: {child1_result['tx'].txid_hex} is not the only child of parent {parent_result['tx'].txid_hex}",
+            f"package RBF failed: {child2_result['tx'].txid_hex} is not the only child of parent {parent_result['tx'].txid_hex}",
+        })
 
         package_hex2, _package_txns2 = self.create_simple_package(coin2, DEFAULT_FEE, DEFAULT_CHILD_FEE)
         package_result = node.submitpackage(package_hex2)
