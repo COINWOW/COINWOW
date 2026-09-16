@@ -1,5 +1,6 @@
 #!/bin/sh
-# Copyright (c) 2015-2021 The COINWOW Core developers
+# Copyright (c) 2015-2021 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018-2022 The COINWOW Core developers
+# Copyright (c) 2018-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Check that it's not possible to start a second coinwowd instance using the same datadir or wallet."""

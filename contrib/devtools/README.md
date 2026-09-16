@@ -83,7 +83,8 @@ Specifying `verbose` will list the full filenames of files of each category.
 
 copyright\_header.py update \<base\_directory\> [verbose]
 ---------------------------------------------------------
-Updates all the copyright headers of `The COINWOW Core developers` which were
+Updates all the copyright headers of `The Bitcoin Core developers` which were
+Copyright (c) 2024-present COINWOW Developers
 changed in a year more recent than is listed. For example:
 ```
 // Copyright (c) <firstYear>-<lastYear> The COINWOW Core developers

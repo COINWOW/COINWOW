@@ -1,4 +1,5 @@
-# Copyright (c) 2022-2023 The COINWOW Core developers
+# Copyright (c) 2022-2023 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
