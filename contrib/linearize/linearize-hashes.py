@@ -2,7 +2,8 @@
 #
 # linearize-hashes.py:  List blocks in a linear, no-fork version of the chain.
 #
-# Copyright (c) 2013-2022 The COINWOW Core developers
+# Copyright (c) 2013-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #

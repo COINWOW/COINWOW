@@ -1,5 +1,6 @@
 # bash programmable completion for coinwowd(1) and coinwow-qt(1)
-# Copyright (c) 2012-2022 The COINWOW Core developers
+# Copyright (c) 2012-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
