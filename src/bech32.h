@@ -1,9 +1,3 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
 // Copyright (c) 2017, 2021 Pieter Wuille
 // Copyright (c) 2021 The Bitcoin Core developers
 // Copyright (c) 2024-present COINWOW Developers
