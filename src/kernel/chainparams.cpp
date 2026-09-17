@@ -149,6 +149,7 @@ assert(genesis.hashMerkleRoot == uint256{"6c18b005f11540a0484181be1e1011503bc38a
         // release ASAP to avoid it where possible.
         vSeeds.clear();
         vSeeds.emplace_back("seed.coinwow.ca");
+        vSeeds.emplace_back("seed2.coinwow.ca");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,28);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,88);
