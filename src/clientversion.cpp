@@ -76,7 +76,8 @@ std::string CopyrightHolders(const std::string& strPrefix)
 
     // Make sure COINWOW Core copyright is not removed by accident
     if (copyright_devs.find("COINWOW Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The COINWOW Core developers";
+        strCopyrightHolders += "\n" + strPrefix + "The Bitcoin Core developers";
+        strCopyright (c) 2024-present COINWOW Developers
     }
     return strCopyrightHolders;
 }
