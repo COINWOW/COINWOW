@@ -5,7 +5,8 @@
 // Distributed under the MIT software license
 
 // Copyright (c) 2017, 2021 Pieter Wuille
-// Copyright (c) 2021-present The COINWOW Core developers
+// Copyright (c) 2021-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
