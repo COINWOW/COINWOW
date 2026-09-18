@@ -74,7 +74,7 @@ Source Code
 
 GitHub Repository:
 
-https://github.com/MaSt3rGG1004/COINWOW
+https://github.com/COINWOW/COINWOW
 
 License
 
