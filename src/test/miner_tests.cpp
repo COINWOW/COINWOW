@@ -417,8 +417,8 @@ void MinerTestingSetup::TestBasicMining(const CScript& scriptPubKey, const std::
 
         // subsidy changing
         int nHeight = m_node.chainman->ActiveChain().Height();
-        // Create an actual 209999-long block chain (without valid blocks).
-        while (m_node.chainman->ActiveChain().Tip()->nHeight < 209999) {
+        // Create an actual 199999-long block chain (without valid blocks).
+        while (m_node.chainman->ActiveChain().Tip()->nHeight < 199999) {
             CBlockIndex* prev = m_node.chainman->ActiveChain().Tip();
             CBlockIndex* next = new CBlockIndex();
             next->phashBlock = new uint256(m_rng.rand256());
@@ -429,8 +429,8 @@ void MinerTestingSetup::TestBasicMining(const CScript& scriptPubKey, const std::
             m_node.chainman->ActiveChain().SetTip(*next);
         }
         BOOST_REQUIRE(mining->createNewBlock(options));
-        // Extend to a 210000-long block chain.
-        while (m_node.chainman->ActiveChain().Tip()->nHeight < 210000) {
+        // Extend to a 200000-long block chain.
+        while (m_node.chainman->ActiveChain().Tip()->nHeight < 200000) {
             CBlockIndex* prev = m_node.chainman->ActiveChain().Tip();
             CBlockIndex* next = new CBlockIndex();
             next->phashBlock = new uint256(m_rng.rand256());
