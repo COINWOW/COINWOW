@@ -167,10 +167,10 @@ assert(genesis.hashMerkleRoot == uint256{"6c18b005f11540a0484181be1e1011503bc38a
         m_assumeutxo_data = {};
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 00000000000000000001b658dd1120e82e66d2790811f89ede9742ada3ed6d77
-            .nTime    = 1741017141,
-            .tx_count = 1161875261,
-            .dTxRate  = 4.620728156243148,
+            // Data from RPC: getchaintxstats 4096 000000000000486afb2d93ceb4a5b7818a593f79e285751de74529e8be166d42
+            .nTime    = 1789267633,
+            .tx_count = 51119,
+            .dTxRate  = 0.001306686036315541,
         };
     }
 };
