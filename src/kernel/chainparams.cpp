@@ -449,14 +449,7 @@ public:
 //         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
 
-        m_assumeutxo_data = {
-            {
-                .height = 160'000,
-                .hash_serialized = AssumeutxoHash{uint256{"fe0a44309b74d6b5883d246cb419c6221bcccf0b308c9b59b7d70783dbdf928a"}},
-                .m_chain_tx_count = 2289496,
-                .blockhash = consteval_ctor(uint256{"0000003ca3c99aff040f2563c2ad8f8ec88bd0fd6b8f0895cfaf1ef90353a62c"}),
-            }
-        };
+        m_assumeutxo_data = {};
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
