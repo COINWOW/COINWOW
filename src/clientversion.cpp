@@ -73,20 +73,15 @@ std::string FormatSubVersion(const std::string& name, int nClientVersion, const 
 std::string CopyrightHolders(const std::string& strPrefix)
 {
     const auto copyright_devs = strprintf(_(COPYRIGHT_HOLDERS), COPYRIGHT_HOLDERS_SUBSTITUTION).translated;
-    std::string strCopyrightHolders = strPrefix + copyright_devs;
-
-    // Make sure COINWOW Core copyright is not removed by accident
-    if (copyright_devs.find("COINWOW Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The COINWOW Core developers";
-    }
-    return strCopyrightHolders;
+    return strPrefix + copyright_devs;
 }
 
 std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/COINWOW/COINWOW>";
 
-    return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR).translated + " ") + "\n" +
+    return strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR).translated + " The Bitcoin Core developers\n" +
+           CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2024, COPYRIGHT_YEAR).translated + " ") + "\n" +
            "\n" +
            strprintf(_("Please contribute if you find %s useful. "
                        "Visit %s for further information about the software."),
