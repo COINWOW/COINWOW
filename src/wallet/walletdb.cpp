@@ -799,6 +799,10 @@ static DBErrors LoadDescriptorWalletRecords(CWallet* pwallet, DatabaseBatch& bat
             strErr = strprintf("%s\nDetails: %s", strErr, e.what());
             return DBErrors::UNKNOWN_DESCRIPTOR;
         }
+        // Descriptors stored before the mainnet BIP32 prefix change (tpub -> xpub) were identified by the hash of
+        // their tpub-encoded form. Adopt the stored ID only if it is exactly that historical ID; otherwise leave
+        // it untouched so the ID verification below fails as usual.
+        if (id != desc.id) desc.AdoptLegacyId(id);
         DescriptorScriptPubKeyMan& spkm = pwallet->LoadDescriptorScriptPubKeyMan(id, desc);
 
         // Prior to doing anything with this spkm, verify ID compatibility

@@ -5,6 +5,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <base58.h>
 #include <clientversion.h>
 #include <key.h>
 #include <key_io.h>
@@ -183,6 +184,50 @@ BOOST_AUTO_TEST_CASE(bip32_test5) {
         BOOST_CHECK_MESSAGE(!dec_extkey.key.IsValid(), "Decoding '" + str + "' as xprv should fail");
         BOOST_CHECK_MESSAGE(!dec_extpubkey.pubkey.IsValid(), "Decoding '" + str + "' as xpub should fail");
     }
+}
+
+BOOST_AUTO_TEST_CASE(bip32_legacy_tpub_prefix) {
+    // Keys encoded with the pre-xpub mainnet version bytes (tpub/tprv) must still decode,
+    // while encoding keeps producing xpub/xprv. Uses the public BIP32 test vector 1 (throwaway keys).
+    const std::string& xprv = test1.vDerive[0].prv;
+    const std::string& xpub = test1.vDerive[0].pub;
+    const CExtKey key = DecodeExtKey(xprv);
+    const CExtPubKey pubkey = DecodeExtPubKey(xpub);
+    BOOST_REQUIRE(key.key.IsValid());
+    BOOST_REQUIRE(pubkey.pubkey.IsValid());
+
+    // Built from hardcoded version bytes, independently of the code under test.
+    const auto encode_with_version = [](std::vector<unsigned char> data, auto&& encode_key) {
+        const size_t version_size = data.size();
+        data.resize(version_size + BIP32_EXTKEY_SIZE);
+        encode_key(data.data() + version_size);
+        return EncodeBase58Check(data);
+    };
+    const std::string tpub = encode_with_version({0x04, 0x35, 0x87, 0xCF}, [&](unsigned char* out) { pubkey.Encode(out); });
+    const std::string tprv = encode_with_version({0x04, 0x35, 0x83, 0x94}, [&](unsigned char* out) { key.Encode(out); });
+    BOOST_CHECK(tpub.starts_with("tpub"));
+    BOOST_CHECK(tprv.starts_with("tprv"));
+
+    // Both prefixes decode to the same keys.
+    BOOST_CHECK(DecodeExtPubKey(tpub) == pubkey);
+    BOOST_CHECK(DecodeExtPubKey(xpub) == pubkey);
+    BOOST_CHECK(DecodeExtKey(tprv) == key);
+    BOOST_CHECK(DecodeExtKey(xprv) == key);
+
+    // Encoding is unchanged (xpub/xprv); the legacy encoder exists only to reproduce historical IDs.
+    BOOST_CHECK_EQUAL(EncodeExtPubKey(DecodeExtPubKey(tpub)), xpub);
+    BOOST_CHECK_EQUAL(EncodeExtKey(DecodeExtKey(tprv)), xprv);
+    BOOST_CHECK_EQUAL(EncodeExtPubKeyLegacyPrefix(pubkey), tpub);
+
+    // Public and private version bytes must not be interchangeable.
+    BOOST_CHECK(!DecodeExtKey(tpub).key.IsValid());
+    BOOST_CHECK(!DecodeExtPubKey(tprv).pubkey.IsValid());
+    BOOST_CHECK(!DecodeExtKey(xpub).key.IsValid());
+    BOOST_CHECK(!DecodeExtPubKey(xprv).pubkey.IsValid());
+
+    // Any other version bytes (here ypub's) are still rejected.
+    const std::string ypub = encode_with_version({0x04, 0x9D, 0x7C, 0xB2}, [&](unsigned char* out) { pubkey.Encode(out); });
+    BOOST_CHECK(!DecodeExtPubKey(ypub).pubkey.IsValid());
 }
 
 BOOST_AUTO_TEST_CASE(bip32_max_depth) {

@@ -92,6 +92,10 @@ public:
     int32_t range_end = 0; // Item after the last; end of range, exclusive, i.e. [range_start, range_end). This will increment with each TopUp()
     int32_t next_index = 0; // Position of the next item to generate
     DescriptorCache cache;
+    //! Exact descriptor text as read from the database, kept only when it differs from the text this version would
+    //! write (e.g. tpub-encoded descriptors created before the mainnet BIP32 prefix change). It is written back
+    //! verbatim so that loading a wallet never silently rewrites its stored descriptor.
+    std::string legacy_text;
 
     void DeserializeDescriptor(const std::string& str)
     {
@@ -106,12 +110,25 @@ public:
         }
         descriptor = std::move(descs.at(0));
         id = DescriptorID(*descriptor);
+        legacy_text.clear();
+        if (descriptor->ToString() != str) legacy_text = str;
+    }
+
+    /** Adopt the ID stored in the database for a descriptor whose stored text differs from the one this version
+     *  produces (tpub-encoded, pre-prefix-change). The ID is only adopted if it is exactly the historical
+     *  DescriptorID of this descriptor, so the database ID check keeps its full strength. */
+    bool AdoptLegacyId(const uint256& db_id)
+    {
+        if (legacy_text.empty() || !descriptor) return false;
+        if (LegacyDescriptorID(*descriptor) != db_id) return false;
+        id = db_id;
+        return true;
     }
 
     SERIALIZE_METHODS(WalletDescriptor, obj)
     {
         std::string descriptor_str;
-        SER_WRITE(obj, descriptor_str = obj.descriptor->ToString());
+        SER_WRITE(obj, descriptor_str = obj.legacy_text.empty() ? obj.descriptor->ToString() : obj.legacy_text);
         READWRITE(descriptor_str, obj.creation_time, obj.next_index, obj.range_start, obj.range_end);
         SER_READ(obj, obj.DeserializeDescriptor(descriptor_str));
     }

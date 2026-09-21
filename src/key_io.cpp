@@ -13,8 +13,10 @@
 #include <util/strencodings.h>
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstring>
+#include <span>
 
 /// Maximum witness length for Bech32 addresses.
 static constexpr std::size_t BECH32_WITNESS_PROG_MAX_LEN = 40;
@@ -243,14 +245,30 @@ std::string EncodeSecret(const CKey& key)
     return ret;
 }
 
+namespace {
+// BIP32 version bytes used for extended keys before the mainnet prefixes were
+// switched to xpub/xprv (i.e. tpub/tprv). They are still accepted when decoding
+// so that keys and wallet descriptors created by earlier versions stay readable,
+// but the regular Encode functions never produce them.
+constexpr std::array<unsigned char, 4> LEGACY_EXT_PUBLIC_KEY_PREFIX{0x04, 0x35, 0x87, 0xCF};
+constexpr std::array<unsigned char, 4> LEGACY_EXT_SECRET_KEY_PREFIX{0x04, 0x35, 0x83, 0x94};
+
+bool HasExtKeyPrefix(const std::vector<unsigned char>& data, std::span<const unsigned char> prefix)
+{
+    return data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin());
+}
+} // namespace
+
 CExtPubKey DecodeExtPubKey(const std::string& str)
 {
     CExtPubKey key;
     std::vector<unsigned char> data;
     if (DecodeBase58Check(str, data, 78)) {
         const std::vector<unsigned char>& prefix = Params().Base58Prefix(CChainParams::EXT_PUBLIC_KEY);
-        if (data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin())) {
+        if (HasExtKeyPrefix(data, prefix)) {
             key.Decode(data.data() + prefix.size());
+        } else if (HasExtKeyPrefix(data, LEGACY_EXT_PUBLIC_KEY_PREFIX)) {
+            key.Decode(data.data() + LEGACY_EXT_PUBLIC_KEY_PREFIX.size());
         }
     }
     return key;
@@ -266,14 +284,25 @@ std::string EncodeExtPubKey(const CExtPubKey& key)
     return ret;
 }
 
+std::string EncodeExtPubKeyLegacyPrefix(const CExtPubKey& key)
+{
+    std::vector<unsigned char> data(LEGACY_EXT_PUBLIC_KEY_PREFIX.begin(), LEGACY_EXT_PUBLIC_KEY_PREFIX.end());
+    const size_t size = data.size();
+    data.resize(size + BIP32_EXTKEY_SIZE);
+    key.Encode(data.data() + size);
+    return EncodeBase58Check(data);
+}
+
 CExtKey DecodeExtKey(const std::string& str)
 {
     CExtKey key;
     std::vector<unsigned char> data;
     if (DecodeBase58Check(str, data, 78)) {
         const std::vector<unsigned char>& prefix = Params().Base58Prefix(CChainParams::EXT_SECRET_KEY);
-        if (data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin())) {
+        if (HasExtKeyPrefix(data, prefix)) {
             key.Decode(data.data() + prefix.size());
+        } else if (HasExtKeyPrefix(data, LEGACY_EXT_SECRET_KEY_PREFIX)) {
+            key.Decode(data.data() + LEGACY_EXT_SECRET_KEY_PREFIX.size());
         }
     }
     if (!data.empty()) {

@@ -198,8 +198,15 @@ public:
 
     enum class StringType {
         PUBLIC,
-        COMPAT // string calculation that mustn't change over time to stay compatible with previous software versions
+        COMPAT, // string calculation that mustn't change over time to stay compatible with previous software versions
+        // Same as PUBLIC/COMPAT, but extended keys are encoded with the pre-xpub (tpub) version bytes.
+        // Only used to reproduce historical descriptor IDs.
+        PUBLIC_LEGACY_EXT,
+        COMPAT_LEGACY_EXT,
     };
+
+    static bool IsCompat(StringType type) { return type == StringType::COMPAT || type == StringType::COMPAT_LEGACY_EXT; }
+    static bool IsLegacyExt(StringType type) { return type == StringType::PUBLIC_LEGACY_EXT || type == StringType::COMPAT_LEGACY_EXT; }
 
     /** Get the descriptor string form. */
     virtual std::string ToString(StringType type=StringType::PUBLIC) const = 0;
@@ -233,7 +240,7 @@ class OriginPubkeyProvider final : public PubkeyProvider
     std::string OriginString(StringType type, bool normalized=false) const
     {
         // If StringType==COMPAT, always use the apostrophe to stay compatible with previous versions
-        bool use_apostrophe = (!normalized && m_apostrophe) || type == StringType::COMPAT;
+        bool use_apostrophe = (!normalized && m_apostrophe) || IsCompat(type);
         return HexStr(m_origin.fingerprint) + FormatHDKeypath(m_origin.path, use_apostrophe);
     }
 
@@ -471,8 +478,9 @@ public:
     std::string ToString(StringType type, bool normalized) const
     {
         // If StringType==COMPAT, always use the apostrophe to stay compatible with previous versions
-        const bool use_apostrophe = (!normalized && m_apostrophe) || type == StringType::COMPAT;
-        std::string ret = EncodeExtPubKey(m_root_extkey) + FormatHDKeypath(m_path, /*apostrophe=*/use_apostrophe);
+        const bool use_apostrophe = (!normalized && m_apostrophe) || IsCompat(type);
+        const std::string key_str = IsLegacyExt(type) ? EncodeExtPubKeyLegacyPrefix(m_root_extkey) : EncodeExtPubKey(m_root_extkey);
+        std::string ret = key_str + FormatHDKeypath(m_path, /*apostrophe=*/use_apostrophe);
         if (IsRange()) {
             ret += "/*";
             if (m_derive == DeriveType::HARDENED) ret += use_apostrophe ? '\'' : 'h';
@@ -616,6 +624,7 @@ public:
         PRIVATE,
         NORMALIZED,
         COMPAT, // string calculation that mustn't change over time to stay compatible with previous software versions
+        COMPAT_LEGACY_EXT, // COMPAT, but with extended keys encoded using the pre-xpub (tpub) version bytes
     };
 
     // NOLINTNEXTLINE(misc-no-recursion)
@@ -674,6 +683,9 @@ public:
                 case StringType::COMPAT:
                     tmp = pubkey->ToString(PubkeyProvider::StringType::COMPAT);
                     break;
+                case StringType::COMPAT_LEGACY_EXT:
+                    tmp = pubkey->ToString(PubkeyProvider::StringType::COMPAT_LEGACY_EXT);
+                    break;
             }
             ret += tmp;
         }
@@ -688,6 +700,13 @@ public:
     {
         std::string ret;
         ToStringHelper(nullptr, ret, compat_format ? StringType::COMPAT : StringType::PUBLIC);
+        return AddChecksum(ret);
+    }
+
+    std::string ToLegacyExtCompatString() const final
+    {
+        std::string ret;
+        ToStringHelper(nullptr, ret, StringType::COMPAT_LEGACY_EXT);
         return AddChecksum(ret);
     }
 
@@ -1277,10 +1296,12 @@ class StringMaker {
     const std::vector<std::unique_ptr<PubkeyProvider>>& m_pubkeys;
     //! Whether to serialize keys as private or public.
     bool m_private;
+    //! Whether to encode extended keys with the pre-xpub (tpub) version bytes (historical descriptor IDs only).
+    bool m_legacy_ext;
 
 public:
-    StringMaker(const SigningProvider* arg LIFETIMEBOUND, const std::vector<std::unique_ptr<PubkeyProvider>>& pubkeys LIFETIMEBOUND, bool priv)
-        : m_arg(arg), m_pubkeys(pubkeys), m_private(priv) {}
+    StringMaker(const SigningProvider* arg LIFETIMEBOUND, const std::vector<std::unique_ptr<PubkeyProvider>>& pubkeys LIFETIMEBOUND, bool priv, bool legacy_ext = false)
+        : m_arg(arg), m_pubkeys(pubkeys), m_private(priv), m_legacy_ext(legacy_ext) {}
 
     std::optional<std::string> ToString(uint32_t key) const
     {
@@ -1288,7 +1309,7 @@ public:
         if (m_private) {
             if (!m_pubkeys[key]->ToPrivateString(*m_arg, ret)) return {};
         } else {
-            ret = m_pubkeys[key]->ToString();
+            ret = m_legacy_ext ? m_pubkeys[key]->ToString(PubkeyProvider::StringType::PUBLIC_LEGACY_EXT) : m_pubkeys[key]->ToString();
         }
         return ret;
     }
@@ -1321,7 +1342,7 @@ public:
     bool ToStringHelper(const SigningProvider* arg, std::string& out, const StringType type,
                         const DescriptorCache* cache = nullptr) const override
     {
-        if (const auto res = m_node->ToString(StringMaker(arg, m_pubkey_args, type == StringType::PRIVATE))) {
+        if (const auto res = m_node->ToString(StringMaker(arg, m_pubkey_args, type == StringType::PRIVATE, type == StringType::COMPAT_LEGACY_EXT))) {
             out = *res;
             return true;
         }
@@ -2394,6 +2415,14 @@ std::unique_ptr<Descriptor> InferDescriptor(const CScript& script, const Signing
 uint256 DescriptorID(const Descriptor& desc)
 {
     std::string desc_str = desc.ToString(/*compat_format=*/true);
+    uint256 id;
+    CSHA256().Write((unsigned char*)desc_str.data(), desc_str.size()).Finalize(id.begin());
+    return id;
+}
+
+uint256 LegacyDescriptorID(const Descriptor& desc)
+{
+    std::string desc_str = desc.ToLegacyExtCompatString();
     uint256 id;
     CSHA256().Write((unsigned char*)desc_str.data(), desc_str.size()).Finalize(id.begin());
     return id;
