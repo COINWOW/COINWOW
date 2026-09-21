@@ -109,6 +109,10 @@ struct Descriptor {
     /** Convert the descriptor back to a string, undoing parsing. */
     virtual std::string ToString(bool compat_format=false) const = 0;
 
+    /** Same as ToString() in compat format, but with extended keys encoded using the pre-xpub (tpub) version bytes.
+     *  Only used by LegacyDescriptorID(). */
+    virtual std::string ToLegacyExtCompatString() const = 0;
+
     /** Whether this descriptor will return one scriptPubKey or multiple (aka is or is not combo) */
     virtual bool IsSingleType() const = 0;
 
@@ -206,5 +210,11 @@ std::unique_ptr<Descriptor> InferDescriptor(const CScript& script, const Signing
 *   This is not part of BIP 380, not guaranteed to be interoperable and should not be exposed to the user.
 */
 uint256 DescriptorID(const Descriptor& desc);
+
+/** The DescriptorID that wallets created before the mainnet BIP32 prefix change (tpub/tprv -> xpub/xprv)
+*   stored in their database, i.e. DescriptorID() computed as if extended keys were encoded with tpub version bytes.
+*   Only used to verify and adopt the ID of such historical descriptors; never use it for new descriptors.
+*/
+uint256 LegacyDescriptorID(const Descriptor& desc);
 
 #endif // COINWOW_SCRIPT_DESCRIPTOR_H

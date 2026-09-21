@@ -21,6 +21,9 @@ CExtKey DecodeExtKey(const std::string& str);
 std::string EncodeExtKey(const CExtKey& extkey);
 CExtPubKey DecodeExtPubKey(const std::string& str);
 std::string EncodeExtPubKey(const CExtPubKey& extpubkey);
+/** Encode with the pre-xpub (tpub) version bytes. Only meant to reproduce the historical
+ *  descriptor ID of wallets created before the prefix change; never use it for new data. */
+std::string EncodeExtPubKeyLegacyPrefix(const CExtPubKey& extpubkey);
 
 std::string EncodeDestination(const CTxDestination& dest);
 CTxDestination DecodeDestination(const std::string& str);
