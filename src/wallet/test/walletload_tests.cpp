@@ -189,11 +189,18 @@ BOOST_FIXTURE_TEST_CASE(wallet_load_legacy_tpub_descriptor, TestingSetup)
     stored_bytes << stored;
     const SerializeData expected_value(stored_bytes.begin(), stored_bytes.end());
 
-    // Database as written by a version that encoded mainnet extended keys as tpub.
+    // Database as written by a version that encoded mainnet extended keys as tpub. A real wallet
+    // would also have persisted the cached parent xpub for the sole key expression (index 0) at
+    // TopUp() time; reproduce it here via the same public, unhardened "/0" derivation so that
+    // SetCache() can expand the descriptor's [range_start, range_end) scriptPubKeys on load.
+    CExtPubKey parent_xpub;
+    BOOST_REQUIRE(DecodeExtPubKey(TEST_XPUB).Derive(parent_xpub, 0));
+
     std::unique_ptr<WalletDatabase> database = CreateMockableWalletDatabase();
     {
         WalletBatch batch(*database);
         BOOST_CHECK(batch.WriteDescriptor(legacy_id, stored));
+        BOOST_CHECK(batch.WriteDescriptorParentCache(parent_xpub, legacy_id, /*key_exp_index=*/0));
     }
     MockableDatabase& mock_db = static_cast<MockableDatabase&>(*database);
 
