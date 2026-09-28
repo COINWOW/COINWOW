@@ -33,6 +33,7 @@ add_executable(test_coinwow
   coinscachepair_tests.cpp
   coinstatsindex_tests.cpp
   common_url_tests.cpp
+  coinwow_params_tests.cpp
   compilerbug_tests.cpp
   compress_tests.cpp
   crypto_tests.cpp
