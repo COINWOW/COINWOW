@@ -21,7 +21,12 @@ WORKDIR=./.tmp
 OUTDIR="${WORKDIR}/out"
 OUTSUBDIR="${OUTDIR}/win"
 TIMESERVER=http://timestamp.comodoca.com
-CERTFILE="win-codesign.cert"
+# COINWOW does not ship a code-signing certificate. Provide the PEM
+# certificate chain of the COINWOW signing identity explicitly.
+if [ -z "$CERTFILE" ] || [ ! -f "$CERTFILE" ]; then
+  echo "error: set CERTFILE to the COINWOW code-signing certificate chain (PEM)"
+  exit 1
+fi
 
 stty -echo
 printf "Enter the passphrase for %s: " "$1"
