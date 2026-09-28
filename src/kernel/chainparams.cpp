@@ -134,8 +134,8 @@ consensus.defaultAssumeValid = uint256{"0000000000000000000000000000000000000000
         pchMessageStart[3] = 0xa9;
         nDefaultPort = 51445;
         nPruneAfterHeight = 100000;
-        m_assumed_blockchain_size = 720;
-        m_assumed_chain_state_size = 14;
+        m_assumed_blockchain_size = 1; // GB. COINWOW chain is small; Bitcoin's 720 GB estimate removed
+        m_assumed_chain_state_size = 1; // GB
 
         genesis = CreateGenesisBlock(1777062967, 3426524174, 0x1d00ffff, 1, 50 * COIN);
 consensus.hashGenesisBlock = genesis.GetHash();
