@@ -31,6 +31,27 @@ confirmation on the live network.
 | First halving | height 200,000 (about late December 2026 at 1,440 blocks/day) | [code] |
 | Coinbase maturity | 100 blocks (about 100 minutes) | [test] |
 
+### 1.1 Halving interval on test chains (behaviour change since 29.99)
+
+Builds up to `5853056` (the 29.99 era) hardcoded `nHeight / 200000` in
+`GetBlockSubsidy` for **every** chain. Commit `17d8d1c` (2026-08-13) switched
+to `consensusParams.nSubsidyHalvingInterval`. On mainnet that value is also
+200,000, so **mainnet consensus is unchanged** [test]
+`coinwow_params_tests`. On regtest (150) and testnet3/testnet4/signet
+(210,000), however, 29.99 and 1.0.0 disagree about the subsidy after the
+first halving height. This was observed in a real mixed-version regtest
+network: a 29.99 node mined block 212 paying 25 CW, and v1.0.0 rejected it
+with `bad-cb-amount`. Mixed-version test networks must therefore stay below
+those heights. It has no impact on the live network.
+
+### 1.2 Miner fee collection (behaviour change since 29.99)
+
+Before `3afe40f` (2026-08-15), `CreateNewBlock` set the coinbase to the
+subsidy only, **without transaction fees**. Such blocks are valid, but the
+fees are burned, and `getblocktemplate.coinbasevalue` excluded them. If the
+pool node (Node1) still runs a 29.99 build, upgrading it to v1.0.0 restores
+fee collection. **[code]**
+
 ## 2. Proof of work
 
 - SHA256d, `powLimit` = `00000000ffff…` (difficulty 1), target spacing 60 s,
