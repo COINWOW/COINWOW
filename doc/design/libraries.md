@@ -109,4 +109,4 @@ class coinwow-qt,coinwowd,coinwow-cli,coinwow-wallet bold
 
 ## Work in progress
 
-- Validation code is moving from *libcoinwow_node* to *libcoinwow_kernel* as part of [The libcoinwowkernel Project #27587](https://github.com/coinwow/coinwow/issues/27587)
+- Validation code is moving from *libcoinwow_node* to *libcoinwow_kernel* as part of [The libcoinwowkernel Project #27587](https://github.com/bitcoin/bitcoin/issues/27587)

@@ -462,7 +462,7 @@ if(BUILD_UTIL_CHAINSTATE)
   #       perform binary checks after the installation step.
   # Relevant discussions:
   # - https://github.com/hebasto/coinwow/pull/236#issuecomment-2183120953
-  # - https://github.com/coinwow/coinwow/pull/30312#issuecomment-2191235833
+  # - https://github.com/bitcoin/bitcoin/pull/30312#issuecomment-2191235833
   set_target_properties(coinwow-chainstate PROPERTIES
     SKIP_BUILD_RPATH OFF
   )

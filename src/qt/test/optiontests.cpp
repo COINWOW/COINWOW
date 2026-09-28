@@ -88,7 +88,7 @@ void OptionTests::migrateSettings()
 
 void OptionTests::integerGetArgBug()
 {
-    // Test regression https://github.com/coinwow/coinwow/issues/24457. Ensure
+    // Test regression https://github.com/bitcoin/bitcoin/issues/24457. Ensure
     // that setting integer prune value doesn't cause an exception to be thrown
     // in the OptionsModel constructor
     gArgs.LockSettings([&](common::Settings& settings) {
@@ -106,8 +106,8 @@ void OptionTests::integerGetArgBug()
 
 void OptionTests::parametersInteraction()
 {
-    // Test that the bug https://github.com/coinwow-core/gui/issues/567 does not resurface.
-    // It was fixed via https://github.com/coinwow-core/gui/pull/568.
+    // Test that the bug https://github.com/bitcoin-core/gui/issues/567 does not resurface.
+    // It was fixed via https://github.com/bitcoin-core/gui/pull/568.
     // With fListen=false in ~/.config/COINWOW/COINWOW-Qt.conf and all else left as default,
     // coinwow-qt should set both -listen and -listenonion to false and start successfully.
     gArgs.LockSettings([&](common::Settings& s) {

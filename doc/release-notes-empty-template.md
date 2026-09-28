@@ -7,18 +7,18 @@ for the process.*
 
 COINWOW Core version *version* is now available from:
 
-  <https://coinwowcore.org/bin/coinwow-core-*version*/>
+  <https://github.com/COINWOW/COINWOW/releases/tag/v*version*>
 
 This release includes new features, various bug fixes and performance
 improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/coinwow/coinwow/issues>
+  <https://github.com/COINWOW/COINWOW/issues>
 
 To receive security and update notifications, please subscribe to:
 
-  <https://coinwowcore.org/en/list/announcements/join/>
+  <https://bitcoincore.org/en/list/announcements/join/>
 
 How to Upgrade
 ==============

@@ -7,8 +7,7 @@ body:
       value: |
         ## This issue tracker is only for technical issues related to COINWOW Core.
 
-        * General coinwow questions and/or support requests should use COINWOW StackExchange at https://coinwow.stackexchange.com.
-        * For reporting security issues, please read instructions at https://coinwowcore.org/en/contact/.
+        * For reporting security issues, do not open a public issue; follow https://github.com/COINWOW/COINWOW/security/policy.
         * If the node is "stuck" during sync or giving "block checksum mismatch" errors, please ensure your hardware is stable by running `memtest` and observe CPU temperature with a load-test tool such as `linpack` before creating an issue.
 
         ----

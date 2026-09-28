@@ -315,7 +315,7 @@ if(WIN32)
 
   # Workaround producing large object files, which cannot be handled by the assembler.
   # More likely to happen with no, or lower levels of optimisation.
-  # See discussion in https://github.com/coinwow/coinwow/issues/28109.
+  # See discussion in https://github.com/bitcoin/bitcoin/issues/28109.
   if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     try_append_cxx_flags("/bigobj" TARGET core_interface_debug SKIP_LINK)
   else()
@@ -560,7 +560,7 @@ else()
   # `PT_LOAD` segments and binaries linked with `-z separate-code`
   # have 4 `PT_LOAD` segments.
   # Relevant discussions:
-  # - https://github.com/coinwow/coinwow/pull/28724#issuecomment-2589347934
+  # - https://github.com/bitcoin/bitcoin/pull/28724#issuecomment-2589347934
   # - https://mail-index.netbsd.org/tech-userlevel/2023/01/05/msg013666.html
   if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD" AND CMAKE_SYSTEM_VERSION VERSION_LESS 11.0)
     try_append_linker_flag("-Wl,-z,noseparate-code" TARGET core_interface)
@@ -632,7 +632,7 @@ endif()
 #       perform binary checks after the installation step.
 # Relevant discussions:
 # - https://github.com/hebasto/coinwow/pull/236#issuecomment-2183120953
-# - https://github.com/coinwow/coinwow/pull/30312#issuecomment-2191235833
+# - https://github.com/bitcoin/bitcoin/pull/30312#issuecomment-2191235833
 # NetBSD always requires runtime paths to be set for executables.
 if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

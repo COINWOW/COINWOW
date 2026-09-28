@@ -5,7 +5,7 @@ Setup
 ---------------------
 COINWOW Core is the original COINWOW client and it builds the backbone of the network. It downloads and, by default, stores the entire history of COINWOW transactions, which requires several hundred gigabytes or more of disk space. Depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to several days or more.
 
-To download COINWOW Core, visit [coinwowcore.org](https://coinwowcore.org/en/download/).
+To download COINWOW Core, visit [bitcoincore.org](https://bitcoincore.org/en/download/).
 
 Running
 ---------------------
@@ -31,9 +31,9 @@ Drag COINWOW Core to your applications folder, and then run COINWOW Core.
 
 ### Need Help?
 
-* See the documentation at the [COINWOW Wiki](https://en.coinwow.it/wiki/Main_Page)
+* See the documentation at the [COINWOW Wiki](https://en.bitcoin.it/wiki/Main_Page)
 for help and more information.
-* Ask for help on [COINWOW StackExchange](https://coinwow.stackexchange.com).
+* Ask for help on [COINWOW StackExchange](https://bitcoin.stackexchange.com).
 * Ask for help on #coinwow on Libera Chat. If you don't have an IRC client, you can use [web.libera.chat](https://web.libera.chat/#coinwow).
 * Ask for help on the [COINWOWTalk](https://coinwowtalk.org/) forums, in the [Technical Support board](https://coinwowtalk.org/index.php?board=4.0).
 
@@ -56,7 +56,7 @@ The COINWOW repo's [root README](/README.md) contains relevant information on th
 - [Developer Notes](developer-notes.md)
 - [Productivity Notes](productivity.md)
 - [Release Process](release-process.md)
-- [Source Code Documentation (External Link)](https://doxygen.coinwowcore.org/)
+- [Source Code Documentation (External Link)](https://doxygen.bitcoincore.org/)
 - [Translation Process](translation_process.md)
 - [Translation Strings Policy](translation_strings_policy.md)
 - [JSON-RPC Interface](JSON-RPC-interface.md)

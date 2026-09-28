@@ -38,7 +38,7 @@ public:
     explicit COINWOWUnits(QObject *parent);
 
     /** COINWOW units.
-      @note Source: https://en.coinwow.it/wiki/Units . Please add only sensible ones
+      @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
     enum class Unit {
         CW,

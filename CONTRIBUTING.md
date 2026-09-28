@@ -84,7 +84,7 @@ To contribute a patch, the workflow is as follows:
   1. Create topic branch
   1. Commit patches
 
-For GUI-related issues or pull requests, the https://github.com/coinwow-core/gui repository should be used.
+For GUI-related issues or pull requests, the https://github.com/bitcoin-core/gui repository should be used.
 For all other issues and pull requests, the https://github.com/coinwow/coinwow node repository should be used.
 
 The master branch for all monotree repositories is identical.
@@ -430,10 +430,10 @@ Rebased-From: <commit hash of the original commit>
 ```
 
 Have a look at [an example backport PR](
-https://github.com/coinwow/coinwow/pull/16189).
+https://github.com/bitcoin/bitcoin/pull/16189).
 
 Also see the [backport.py script](
-https://github.com/coinwow-core/coinwow-maintainer-tools#backport).
+https://github.com/bitcoin-core/bitcoin-maintainer-tools#backport).
 
 Copyright
 ---------
