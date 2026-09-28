@@ -21,7 +21,7 @@ Release Process
 
 * On both the master branch and the new release branch:
   - update `CLIENT_VERSION_MAJOR` in [`CMakeLists.txt`](../CMakeLists.txt)
-* On the new release branch in [`CMakeLists.txt`](../CMakeLists.txt)(see [this commit](https://github.com/coinwow/coinwow/commit/742f7dd)):
+* On the new release branch in [`CMakeLists.txt`](../CMakeLists.txt)(see [this commit](https://github.com/bitcoin/bitcoin/commit/742f7dd)):
   - set `CLIENT_VERSION_MINOR` to `0`
   - set `CLIENT_VERSION_BUILD` to `0`
   - set `CLIENT_VERSION_IS_RELEASE` to `true`
@@ -29,7 +29,7 @@ Release Process
 #### Before branch-off
 
 * Update translations see [translation_process.md](/doc/translation_process.md#synchronising-translations).
-* Update hardcoded [seeds](/contrib/seeds/README.md), see [this pull request](https://github.com/coinwow/coinwow/pull/27488) for an example.
+* Update hardcoded [seeds](/contrib/seeds/README.md), see [this pull request](https://github.com/bitcoin/bitcoin/pull/27488) for an example.
 * Update the following variables in [`src/kernel/chainparams.cpp`](/src/kernel/chainparams.cpp) for mainnet, testnet, and signet:
   - `m_assumed_blockchain_size` and `m_assumed_chain_state_size` with the current size plus some overhead (see
     [this](#how-to-calculate-assumed-blockchain-and-chain-state-size) for information on how to calculate them).
@@ -37,7 +37,7 @@ Release Process
     that causes rejection of blocks in the past history.
   - `chainTxData` with statistics about the transaction count and rate. Use the output of the `getchaintxstats` RPC with an
     `nBlocks` of 4096 (28 days) and a `bestblockhash` of RPC `getbestblockhash`; see
-    [this pull request](https://github.com/coinwow/coinwow/pull/28591) for an example. Reviewers can verify the results by running
+    [this pull request](https://github.com/bitcoin/bitcoin/pull/28591) for an example. Reviewers can verify the results by running
     `getchaintxstats <window_block_count> <window_final_block_hash>` with the `window_block_count` and `window_final_block_hash` from your output.
   - `defaultAssumeValid` with the output of RPC `getblockhash` using the `height` of `window_final_block_height` above
     (and update the block height comment with that height), taking into account the following:
@@ -66,24 +66,24 @@ Release Process
 #### After branch-off (on the major release branch)
 
 - Update the versions.
-- Create the draft, named "*version* Release Notes Draft", as a [collaborative wiki](https://github.com/coinwow-core/coinwow-devwiki/wiki/_new).
+- Create the draft, named "*version* Release Notes Draft", as a [collaborative wiki](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/_new).
 - Clear the release notes: `cp doc/release-notes-empty-template.md doc/release-notes.md`
-- Create a pinned meta-issue for testing the release candidate (see [this issue](https://github.com/coinwow/coinwow/issues/27621) for an example) and provide a link to it in the release announcements where useful.
+- Create a pinned meta-issue for testing the release candidate (see [this issue](https://github.com/bitcoin/bitcoin/issues/27621) for an example) and provide a link to it in the release announcements where useful.
 - Translations on Transifex
     - Change the auto-update URL for the new major version's resource away from `master` and to the branch, e.g. `https://raw.githubusercontent.com/coinwow/coinwow/<branch>/src/qt/locale/coinwow_en.xlf`. Do not forget this or it will keep tracking the translations on master instead, drifting away from the specific major release.
 - Prune inputs from the qa-assets repo (See [pruning
-  inputs](https://github.com/coinwow-core/qa-assets#pruning-inputs)).
+  inputs](https://github.com/bitcoin-core/qa-assets#pruning-inputs)).
 
 #### Before final release
 
-- Merge the release notes from [the wiki](https://github.com/coinwow-core/coinwow-devwiki/wiki/) into the branch.
+- Merge the release notes from [the wiki](https://github.com/bitcoin-core/bitcoin-devwiki/wiki/) into the branch.
 - Ensure the "Needs release note" label is removed from all relevant pull
   requests and issues:
   https://github.com/coinwow/coinwow/issues?q=label%3A%22Needs+release+note%22
 
 #### Tagging a release (candidate)
 
-To tag the version (or release candidate) in git, use the `make-tag.py` script from [coinwow-maintainer-tools](https://github.com/coinwow-core/coinwow-maintainer-tools). From the root of the repository run:
+To tag the version (or release candidate) in git, use the `make-tag.py` script from [coinwow-maintainer-tools](https://github.com/bitcoin-core/bitcoin-maintainer-tools). From the root of the repository run:
 
     ../coinwow-maintainer-tools/make-tag.py v(new version, e.g. 25.0)
 
@@ -99,13 +99,13 @@ Install Guix using one of the installation methods detailed in
 Check out the source code in the following directory hierarchy.
 
     cd /path/to/your/toplevel/build
-    git clone https://github.com/coinwow-core/guix.sigs.git
-    git clone https://github.com/coinwow-core/coinwow-detached-sigs.git
+    git clone https://github.com/bitcoin-core/guix.sigs.git
+    git clone https://github.com/bitcoin-core/bitcoin-detached-sigs.git
     git clone https://github.com/coinwow/coinwow.git
 
 ### Write the release notes
 
-Open a draft of the release notes for collaborative editing at https://github.com/coinwow-core/coinwow-devwiki/wiki.
+Open a draft of the release notes for collaborative editing at https://github.com/bitcoin-core/bitcoin-devwiki/wiki.
 
 For the period during which the notes are being edited on the wiki, the version on the branch should be wiped and replaced with a link to the wiki which should be used for all announcements until `-final`.
 
@@ -158,7 +158,7 @@ git commit -m "Add attestations by ${SIGNER} for ${VERSION} non-codesigned"
 popd
 ```
 
-Then open a Pull Request to the [guix.sigs repository](https://github.com/coinwow-core/guix.sigs).
+Then open a Pull Request to the [guix.sigs repository](https://github.com/bitcoin-core/guix.sigs).
 
 ## Codesigning
 
@@ -206,7 +206,7 @@ popd
 ### Non-codesigners: wait for Windows and macOS detached signatures
 
 - Once the Windows and macOS builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [coinwow-detached-sigs](https://github.com/coinwow-core/coinwow-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [coinwow-detached-sigs](https://github.com/bitcoin-core/bitcoin-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 ### Create the codesigned build outputs
 
@@ -225,7 +225,7 @@ git commit -m "Add attestations by ${SIGNER} for ${VERSION} codesigned"
 popd
 ```
 
-Then open a Pull Request to the [guix.sigs repository](https://github.com/coinwow-core/guix.sigs).
+Then open a Pull Request to the [guix.sigs repository](https://github.com/bitcoin-core/guix.sigs).
 
 ## After 6 or more people have guix-built and their results match
 
@@ -236,7 +236,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 ```
 
 
-- Upload to the coinwowcore.org server:
+- Upload to the bitcoincore.org server:
     1. The contents of each `./coinwow/guix-build-${VERSION}/output/${HOST}/` directory.
 
        Guix will output all of the results into host subdirectories, but the SHA256SUMS
@@ -263,22 +263,22 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
   ```
 
   Insert the magnet URI into the announcement sent to mailing lists. This permits
-  people without access to `coinwowcore.org` to download the binary distribution.
+  people without access to `bitcoincore.org` to download the binary distribution.
   Also put it into the `optional_magnetlink:` slot in the YAML file for
-  coinwowcore.org.
+  bitcoincore.org.
 
 - Archive the release notes for the new version to `doc/release-notes/release-notes-${VERSION}.md`
   (branch `master` and branch of the release).
 
-- Update the coinwowcore.org website
+- Update the bitcoincore.org website
 
   - blog post
 
-  - maintained versions [table](https://github.com/coinwow-core/coinwowcore.org/commits/master/_includes/posts/maintenance-table.md)
+  - maintained versions [table](https://github.com/bitcoin-core/bitcoincore.org/commits/master/_includes/posts/maintenance-table.md)
 
   - RPC documentation update
 
-      - See https://github.com/coinwow-core/coinwowcore.org/blob/master/contrib/doc-gen/
+      - See https://github.com/bitcoin-core/bitcoincore.org/blob/master/contrib/doc-gen/
 
 
 - Update repositories
@@ -291,7 +291,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
       - Push the flatpak to flathub, e.g. https://github.com/flathub/org.coinwowcore.coinwow-qt/pull/2
 
-      - Push the snap, see https://github.com/coinwow-core/packaging/blob/main/snap/local/build.md
+      - Push the snap, see https://github.com/bitcoin-core/packaging/blob/main/snap/local/build.md
 
   - Create a [new GitHub release](https://github.com/coinwow/coinwow/releases/new) with a link to the archived release notes
 
@@ -299,7 +299,7 @@ cat "$VERSION"/*/all.SHA256SUMS.asc > SHA256SUMS.asc
 
   - coinwow-dev and coinwow-core-dev mailing list
 
-  - COINWOW Core announcements list https://coinwowcore.org/en/list/announcements/join/
+  - COINWOW Core announcements list https://bitcoincore.org/en/list/announcements/join/
 
   - COINWOW Core Twitter https://twitter.com/coinwowcoreorg
 

@@ -84,12 +84,12 @@ $ FUZZ=address_deserialize_v2 build_fuzz/bin/fuzz -runs=1 fuzz_corpora/address_d
 
 ## Fuzzing corpora
 
-The project's collection of seed corpora is found in the [`coinwow-core/qa-assets`](https://github.com/coinwow-core/qa-assets) repo.
+The project's collection of seed corpora is found in the [`bitcoin-core/qa-assets`](https://github.com/bitcoin-core/qa-assets) repo.
 
-To fuzz `process_message` using the [`coinwow-core/qa-assets`](https://github.com/coinwow-core/qa-assets) seed corpus:
+To fuzz `process_message` using the [`bitcoin-core/qa-assets`](https://github.com/bitcoin-core/qa-assets) seed corpus:
 
 ```sh
-$ git clone --depth=1 https://github.com/coinwow-core/qa-assets
+$ git clone --depth=1 https://github.com/bitcoin-core/qa-assets
 $ FUZZ=process_message build_fuzz/bin/fuzz qa-assets/fuzz_corpora/process_message/
 INFO: Seed: 1346407872
 INFO: Loaded 1 modules   (424174 inline 8-bit counters): 424174 [0x55d8a9004ab8, 0x55d8a906c3a6),
@@ -121,7 +121,7 @@ will limit the ability to find new coverage. A good approach is to perform
 occasional long runs without the additional bug-detectors
 (`--preset=libfuzzer-nosan`) and then merge new inputs into a corpus as described in
 the qa-assets repo
-(https://github.com/coinwow-core/qa-assets/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+(https://github.com/bitcoin-core/qa-assets/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
 Patience is useful; even with improved throughput, libFuzzer may need days and
 10s of millions of executions to reach deep/hard targets.
 
@@ -146,9 +146,9 @@ Patience is useful; even with improved throughput, libFuzzer may need days and
 
 ## Submit improved coverage
 
-If you find coverage increasing inputs when fuzzing you are highly encouraged to submit them for inclusion in the [`coinwow-core/qa-assets`](https://github.com/coinwow-core/qa-assets) repo.
+If you find coverage increasing inputs when fuzzing you are highly encouraged to submit them for inclusion in the [`bitcoin-core/qa-assets`](https://github.com/bitcoin-core/qa-assets) repo.
 
-Every single pull request submitted against the COINWOW Core repo is automatically tested against all inputs in the [`coinwow-core/qa-assets`](https://github.com/coinwow-core/qa-assets) repo. Contributing new coverage increasing inputs is an easy way to help make COINWOW Core more robust.
+Every single pull request submitted against the COINWOW Core repo is automatically tested against all inputs in the [`bitcoin-core/qa-assets`](https://github.com/bitcoin-core/qa-assets) repo. Contributing new coverage increasing inputs is an easy way to help make COINWOW Core more robust.
 
 ## Building and debugging fuzz tests
 
@@ -266,9 +266,9 @@ Read the [Honggfuzz documentation](https://github.com/google/honggfuzz/blob/mast
 COINWOW Core participates in Google's [OSS-Fuzz](https://github.com/google/oss-fuzz/tree/master/projects/coinwow-core)
 program, which includes a dashboard of [publicly disclosed vulnerabilities](https://issues.oss-fuzz.com/issues?q=coinwow-core%20status:open).
 
-COINWOW Core follows its [security disclosure policy](https://coinwowcore.org/en/security-advisories/),
+COINWOW Core follows its [security disclosure policy](https://bitcoincore.org/en/security-advisories/),
 which may differ from Google's standard
 [90-day disclosure window](https://google.github.io/oss-fuzz/getting-started/bug-disclosure-guidelines/)
 .
 
-OSS-Fuzz also produces [a fuzzing coverage report](https://oss-fuzz.com/coverage-report/job/libfuzzer_asan_coinwow-core/latest).
+OSS-Fuzz also produces [a fuzzing coverage report](https://oss-fuzz.com/coverage-report/job/libfuzzer_asan_bitcoin-core/latest).

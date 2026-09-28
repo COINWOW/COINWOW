@@ -74,7 +74,7 @@ This section describes the major components of the Inter-Process Communication (
 - These Cap’n Proto files ([learn more about Cap'n Proto RPC](https://capnproto.org/rpc.html)) define the structure and format of messages that are exchanged over IPC. They serve as blueprints for generating C++ code that bridges the gap between high-level C++ interfaces and low-level socket communication.
 
 ### The `mpgen` Code Generation Tool
-- A central component of the IPC framework is the `mpgen` tool which is part of the [`libmultiprocess` project](https://github.com/coinwow-core/libmultiprocess). This tool takes the `.capnp` files as input and generates C++ code.
+- A central component of the IPC framework is the `mpgen` tool which is part of the [`libmultiprocess` project](https://github.com/bitcoin-core/libmultiprocess). This tool takes the `.capnp` files as input and generates C++ code.
 - The generated code handles IPC communication, translating interface calls into socket reads and writes.
 
 ### C++ Client Subclasses in Generated Code
@@ -150,7 +150,7 @@ The currently defined IPC interfaces are unstable, and can change freely with no
 
 ## Security Considerations
 
-The integration of [Cap’n Proto](https://capnproto.org/) and [libmultiprocess](https://github.com/coinwow-core/libmultiprocess) into the COINWOW Core architecture increases its potential attack surface. Cap’n Proto, being a complex and substantial new dependency, introduces potential sources of vulnerability, particularly through the creation of new UNIX sockets. The inclusion of libmultiprocess, while a smaller external dependency, also contributes to this risk. However, plans are underway to incorporate libmultiprocess as a git subtree, aligning it more closely with the project's well-reviewed internal libraries. While adopting these multiprocess features does introduce some risk, it's worth noting that they can be disabled, allowing builds without these new dependencies. This flexibility ensures that users can balance functionality with security considerations as needed.
+The integration of [Cap’n Proto](https://capnproto.org/) and [libmultiprocess](https://github.com/bitcoin-core/libmultiprocess) into the COINWOW Core architecture increases its potential attack surface. Cap’n Proto, being a complex and substantial new dependency, introduces potential sources of vulnerability, particularly through the creation of new UNIX sockets. The inclusion of libmultiprocess, while a smaller external dependency, also contributes to this risk. However, plans are underway to incorporate libmultiprocess as a git subtree, aligning it more closely with the project's well-reviewed internal libraries. While adopting these multiprocess features does introduce some risk, it's worth noting that they can be disabled, allowing builds without these new dependencies. This flexibility ensures that users can balance functionality with security considerations as needed.
 
 ## Example Use Cases and Flows
 
@@ -207,12 +207,12 @@ sequenceDiagram
 
 Further improvements are possible such as:
 
-- Separating indexes from `coinwow-node`, and running indexing code in separate processes (see [indexes: Stop using node internal types #24230](https://github.com/coinwow/coinwow/pull/24230)).
+- Separating indexes from `coinwow-node`, and running indexing code in separate processes (see [indexes: Stop using node internal types #24230](https://github.com/bitcoin/bitcoin/pull/24230)).
 - Enabling wallet processes to listen for JSON-RPC requests on their own ports instead of needing the node process to listen and forward requests to them.
 - Automatically generating `.capnp` files from C++ interface definitions (see [Interface Definition Maintenance](#interface-definition-maintenance)).
 - Simplifying and stabilizing interfaces (see [Interface Stability](#interface-stability)).
 - Adding sandbox features, restricting subprocess access to resources and data (see [https://eklitzke.org/multiprocess-coinwow](https://eklitzke.org/multiprocess-coinwow)).
-- Using Cap'n Proto's support for [other languages](https://capnproto.org/otherlang.html), such as [Rust](https://github.com/capnproto/capnproto-rust), to allow code written in other languages to call COINWOW Core C++ code, and vice versa (see [How to rustify libmultiprocess? #56](https://github.com/coinwow-core/libmultiprocess/issues/56)).
+- Using Cap'n Proto's support for [other languages](https://capnproto.org/otherlang.html), such as [Rust](https://github.com/capnproto/capnproto-rust), to allow code written in other languages to call COINWOW Core C++ code, and vice versa (see [How to rustify libmultiprocess? #56](https://github.com/bitcoin-core/libmultiprocess/issues/56)).
 
 ## Conclusion
 
@@ -257,8 +257,8 @@ This modularization represents an advancement in COINWOW Core's architecture, of
 ## References
 
 - **Cap’n Proto RPC protocol description**: https://capnproto.org/rpc.html
-- **libmultiprocess project page**: https://github.com/coinwow-core/libmultiprocess
+- **libmultiprocess project page**: https://github.com/bitcoin-core/libmultiprocess
 
 ## Acknowledgements
 
-This design doc was written by @ryanofsky, who is grateful to all the reviewers who gave feedback and tested [multiprocess PRs](https://github.com/coinwow/coinwow/pull/28722), and everyone else who's helped with this project. Particular thanks to @ariard who deeply reviewed IPC code and improved the design of the IPC library and initialization process. @jnewbery who championed the early refactoring PRs and helped guide them through development and review. @sjors who has reviewed and repeatedly tested multiprocess code, reporting many issues and helping debug them. @hebasto, @fanquake, and @maflcko who made significant improvements to the build system and fixed countless build issues. @vasild and @jamesob who were brave contributors to the libmultiprocess library. And Chaincode Labs for making this work possible. Also thanks to ChatGPT, who actually wrote most of this document (not @ryanofsky).
+This design doc was written by @ryanofsky, who is grateful to all the reviewers who gave feedback and tested [multiprocess PRs](https://github.com/bitcoin/bitcoin/pull/28722), and everyone else who's helped with this project. Particular thanks to @ariard who deeply reviewed IPC code and improved the design of the IPC library and initialization process. @jnewbery who championed the early refactoring PRs and helped guide them through development and review. @sjors who has reviewed and repeatedly tested multiprocess code, reporting many issues and helping debug them. @hebasto, @fanquake, and @maflcko who made significant improvements to the build system and fixed countless build issues. @vasild and @jamesob who were brave contributors to the libmultiprocess library. And Chaincode Labs for making this work possible. Also thanks to ChatGPT, who actually wrote most of this document (not @ryanofsky).
