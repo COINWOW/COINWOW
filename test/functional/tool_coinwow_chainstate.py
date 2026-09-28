@@ -40,7 +40,12 @@ class COINWOWChainstateTest(COINWOWTestFramework):
         node.stop_node()
 
         self.log.info(f"Testing coinwow-chainstate {self.get_binaries().chainstate_argv()} with datadir: {datadir}")
-        block_one = "010000006fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000982051fd1e4ba744bbbe680e1fee14677ba1a3c3540bf7b1cdb606e857233e0e61bc6649ffff001d01e362990101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000"
+        # COINWOW mainnet block at height 1 built on the COINWOW genesis block
+        # (valid proof of work at difficulty 1, coinbase paying 0 to OP_TRUE).
+        # It is a test-only block, not the block 1 of the live chain.
+        # The previous fixture was Bitcoin's block 1, whose parent (Bitcoin's
+        # genesis) does not exist on COINWOW.
+        block_one = "000000203810678ce45376f4ba3a03f0d77b41908ecf14a962acfb0e274d67930000000033d9596eac476d9f5cf157e5a4b19ddeb32c2874159a11e5e0877255a09699438fd6eb69ffff001d002e648c0101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff33010130434f494e574f5720636f696e776f772d636861696e73746174652066756e6374696f6e616c207465737420626c6f636bffffffff010000000000000000015100000000"
         self.add_block(datadir, block_one, "Block has not yet been rejected")
         self.add_block(datadir, block_one, "duplicate")
         self.add_block(datadir, "00", "Block decode failed")
