@@ -138,7 +138,7 @@ def bip155_serialize(spec):
     return r
 
 def process_nodes(g, f, structname):
-    g.write('static const uint8_t %s[] = {\n' % structname)
+    entries = []
     for line in f:
         comment = line.find('#')
         if comment != -1:
@@ -151,7 +151,14 @@ def process_nodes(g, f, structname):
         if spec is None:  # ignore this entry (e.g. no longer supported addresses like TORV2)
             continue
         blob = bip155_serialize(spec)
-        hoststr = ','.join(('0x%02x' % b) for b in blob)
+        entries.append(','.join(('0x%02x' % b) for b in blob))
+    if not entries:
+        # COINWOW: networks without seed nodes get no array (a zero-length
+        # array is not valid C++), and chainparams does not reference it.
+        g.write('// %s: no fixed seeds\n' % structname)
+        return
+    g.write('static const uint8_t %s[] = {\n' % structname)
+    for hoststr in entries:
         g.write(f'    {hoststr},\n')
     g.write('};\n')
 
