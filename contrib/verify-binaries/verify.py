@@ -6,7 +6,7 @@
 """Script for verifying COINWOW Core release binaries.
 
 This script attempts to download the sum file SHA256SUMS and corresponding
-signature file SHA256SUMS.asc from bitcoincore.org and coinwow.org and
+signature file SHA256SUMS.asc from bitcoincore.org and bitcoin.org and
 compares them.
 
 The sum-signature file is signed by a number of builder keys. This script
@@ -48,7 +48,7 @@ from pathlib import PurePath, Path
 
 # The primary host; this will fail if we can't retrieve files from here.
 HOST1 = "https://bitcoincore.org"
-HOST2 = "https://coinwow.org"
+HOST2 = "https://bitcoin.org"
 VERSIONPREFIX = "coinwow-core-"
 SUMS_FILENAME = 'SHA256SUMS'
 SIGNATUREFILENAME = f"{SUMS_FILENAME}.asc"
@@ -687,7 +687,7 @@ def main():
         default=bool_from_env('BINVERIFY_REQUIRE_ALL_HOSTS'),
         help=(
             f'If set, require all hosts ({HOST1}, {HOST2}) to provide signatures. '
-            '(Sometimes coinwow.org lags behind bitcoincore.org.)')
+            '(Sometimes bitcoin.org lags behind bitcoincore.org.)')
     )
 
     bin_parser = subparsers.add_parser("bin", help="Verify local binaries.")
