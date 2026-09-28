@@ -180,11 +180,12 @@ You can also manually configure your node to be reachable from the Tor network.
 Add these lines to your `/etc/tor/torrc` (or equivalent config file):
 
     HiddenServiceDir /var/lib/tor/coinwow-service/
-    HiddenServicePort 8333 127.0.0.1:8334
+    HiddenServicePort 51445 127.0.0.1:51447
 
 The directory can be different of course, but virtual port numbers should be equal to
-your coinwowd's P2P listen port (8333 by default), and target addresses and ports
-should be equal to binding address and port for inbound Tor connections (127.0.0.1:8334 by default).
+your coinwowd's P2P listen port (51445 by default), and target addresses and ports
+should be equal to binding address and port for inbound Tor connections (127.0.0.1:51447 by default
+on mainnet: the usual P2P port + 1 would be 51446, which is the COINWOW RPC port, so it is skipped).
 
     -externalip=X   You can tell coinwow about its publicly reachable addresses using
                     this option, and this can be an onion address. Given the above
@@ -217,7 +218,7 @@ In a typical situation, where you're only reachable via Tor, this should suffice
 listen on all devices and another node could establish a clearnet connection, when knowing
 your address. To mitigate this, additionally bind the address of your Tor proxy:
 
-    coinwowd ... -bind=127.0.0.1:8334=onion
+    coinwowd ... -bind=127.0.0.1:51447=onion
 
 If you don't care too much about hiding your node, and want to be reachable on IPv4
 as well, use `discover` instead:
