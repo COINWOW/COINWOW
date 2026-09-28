@@ -108,11 +108,7 @@ option(BUILD_UTIL "Build coinwow-util executable." ${BUILD_TESTS})
 
 option(BUILD_UTIL_CHAINSTATE "Build experimental coinwow-chainstate executable." OFF)
 option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ${BUILD_UTIL_CHAINSTATE})
-option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ON)
 
-if(BUILD_KERNEL_LIB)
-  add_subdirectory(src/kernel)
-endif()
 add_subdirectory(src/consensus)
 option(ENABLE_WALLET "Enable wallet." ON)
 if(ENABLE_WALLET)
@@ -721,6 +717,4 @@ endif()
 
 # We want all build properties to be encapsulated properly.
 include(WarnAboutGlobalProperties)
-add_executable(genesis_miner src/genesis_miner.cpp)
-target_link_libraries(genesis_miner bitcoinkernel coinwow_consensus)
 
