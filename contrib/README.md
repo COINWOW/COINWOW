@@ -36,7 +36,7 @@ Test and Verify Tools
 Utilities to generate test vectors for the data-driven COINWOW tests.
 
 ### [Verify-Binaries](/contrib/verify-binaries) ###
-This script attempts to download and verify the signature file SHA256SUMS.asc from coinwow.org.
+Upstream Bitcoin Core tool: it downloads and verifies Bitcoin Core release signatures (SHA256SUMS.asc from bitcoincore.org / bitcoin.org). It does not verify COINWOW releases.
 
 Command Line Tools
 ---------------------
