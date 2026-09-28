@@ -213,17 +213,18 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 1512; // 75%
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 2016;
 
-        consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000015f5e0c9f13455b0eb17"};
-        consensus.defaultAssumeValid = uint256{"00000000000003fc7967410ba2d0a8a8d50daedc318d43e8baf1a9782c236a57"}; // 3974606
+        consensus.nMinimumChainWork = uint256{}; // COINWOW: no public testnet3 chain yet; Bitcoin testnet3 value removed
+        consensus.defaultAssumeValid = uint256{};
 
-        pchMessageStart[0] = 0x0b;
-        pchMessageStart[1] = 0x11;
-        pchMessageStart[2] = 0x09;
-        pchMessageStart[3] = 0x07;
-        nDefaultPort = 18333;
+        // COINWOW testnet3 identity (must not collide with Bitcoin testnet3 0b110907/18333)
+        pchMessageStart[0] = 0xc1;
+        pchMessageStart[1] = 0x1f;
+        pchMessageStart[2] = 0xe3;
+        pchMessageStart[3] = 0xb3;
+        nDefaultPort = 51455;
         nPruneAfterHeight = 1000;
-        m_assumed_blockchain_size = 200;
-        m_assumed_chain_state_size = 19;
+        m_assumed_blockchain_size = 1;
+        m_assumed_chain_state_size = 1;
         genesis = CreateGenesisBlock(1754491328, 0, 0x207fffff, 1, 7000000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         //std::cout << "[TESTNET] Genesis hash computed: " << consensus.hashGenesisBlock.ToString() << std::endl;
@@ -232,14 +233,9 @@ public:
 //         assert(consensus.hashGenesisBlock == uint256{"7afce9330fe1579b50e08980cc0934c87b25d3411acacc68fe4767478bee9c8a"});
 //         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
+        // COINWOW: no public testnet3 seeds (inherited Bitcoin testnet seeds removed)
         vFixedSeeds.clear();
         vSeeds.clear();
-        // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnet-seed.coinwow.jonasschnelli.ch.");
-        vSeeds.emplace_back("seed.tbtc.petertodd.net.");
-        vSeeds.emplace_back("seed.testnet.coinwow.sprovoost.nl.");
-        vSeeds.emplace_back("testnet-seed.bluematt.me."); // Just a static list of stable node(s), only supports x9
-        vSeeds.emplace_back("seed.testnet.achownodes.xyz."); // Ava Chow, only supports x1, x5, x9, x49, x809, x849, xd, x400, x404, x408, x448, xc08, xc48, x40c
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -249,19 +245,12 @@ public:
 
         bech32_hrp = "tb";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_test), std::end(chainparams_seed_test));
-
         fDefaultConsistencyChecks = false;
         m_is_mockable_chain = false;
 
         m_assumeutxo_data = {};
 
-        chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 00000000000003fc7967410ba2d0a8a8d50daedc318d43e8baf1a9782c236a57
-            .nTime    = 1741042082,
-            .tx_count = 475477615,
-            .dTxRate  = 17.15933950357594,
-        };
+        chainTxData = ChainTxData{0, 0, 0};
     }
 };
 
@@ -304,14 +293,15 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 1512; // 75%
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 2016;
 
-        consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000001d6dce8651b6094e4c1"};
-        consensus.defaultAssumeValid = uint256{"0000000000003ed4f08dbdf6f7d6b271a6bcffce25675cb40aa9fa43179a89f3"}; // 72600
+        consensus.nMinimumChainWork = uint256{}; // COINWOW: no public testnet4 chain yet; Bitcoin testnet4 value removed
+        consensus.defaultAssumeValid = uint256{};
 
-        pchMessageStart[0] = 0x1c;
-        pchMessageStart[1] = 0x16;
-        pchMessageStart[2] = 0x3f;
-        pchMessageStart[3] = 0x28;
-        nDefaultPort = 48333;
+        // COINWOW testnet4 identity (must not collide with Bitcoin testnet4 1c163f28/48333)
+        pchMessageStart[0] = 0xc1;
+        pchMessageStart[1] = 0x2f;
+        pchMessageStart[2] = 0xe3;
+        pchMessageStart[3] = 0xb5;
+        nDefaultPort = 51465;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 11;
         m_assumed_chain_state_size = 1;
@@ -325,11 +315,9 @@ public:
 //         assert(consensus.hashGenesisBlock == uint256{"4fd82b6098f99a2799e030fc253c8e29e2455cd859be4522db134ddd4b5c013f"});
 //         assert(genesis.hashMerkleRoot == uint256{"55eea7049f3a5c35ef99330df21519822467e05b234c892e126d6180f53be896"});
 
+        // COINWOW: no public testnet4 seeds (inherited Bitcoin testnet4 seeds removed)
         vFixedSeeds.clear();
         vSeeds.clear();
-        // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed.testnet4.coinwow.sprovoost.nl."); // Sjors Provoost
-        vSeeds.emplace_back("seed.testnet4.wiz.biz."); // Jason Maurice
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -339,19 +327,12 @@ public:
 
         bech32_hrp = "tb";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_testnet4), std::end(chainparams_seed_testnet4));
-
         fDefaultConsistencyChecks = false;
         m_is_mockable_chain = false;
 
         m_assumeutxo_data = {};
 
-        chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 0000000000003ed4f08dbdf6f7d6b271a6bcffce25675cb40aa9fa43179a89f3
-            .nTime    = 1741070246,
-            .tx_count = 7653966,
-            .dTxRate  = 1.239174414591965,
-        };
+        chainTxData = ChainTxData{0, 0, 0};
     }
 };
 
@@ -367,21 +348,16 @@ public:
         vSeeds.clear();
 
         if (!options.challenge) {
+            // COINWOW: the default challenge is still Bitcoin's signet challenge.
+            // COINWOW does not operate a default signet (nobody can sign its
+            // blocks), so no seeds or Bitcoin signet chain data are provided.
+            // Run a private signet with -signetchallenge instead.
             bin = "512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae"_hex_v_u8;
-            vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_signet), std::end(chainparams_seed_signet));
-            vSeeds.emplace_back("seed.signet.coinwow.sprovoost.nl.");
-            vSeeds.emplace_back("seed.signet.achownodes.xyz."); // Ava Chow, only supports x1, x5, x9, x49, x809, x849, xd, x400, x404, x408, x448, xc08, xc48, x40c
-
-            consensus.nMinimumChainWork = uint256{"000000000000000000000000000000000000000000000000000002b517f3d1a1"};
-            consensus.defaultAssumeValid = uint256{"000000895a110f46e59eb82bbc5bfb67fa314656009c295509c21b4999f5180a"}; // 237722
-            m_assumed_blockchain_size = 9;
-            m_assumed_chain_state_size = 1;
-            chainTxData = ChainTxData{
-                // Data from RPC: getchaintxstats 4096 000000895a110f46e59eb82bbc5bfb67fa314656009c295509c21b4999f5180a
-                .nTime    = 1741019645,
-                .tx_count = 16540736,
-                .dTxRate  = 1.064918879911595,
-            };
+            consensus.nMinimumChainWork = uint256{};
+            consensus.defaultAssumeValid = uint256{};
+            m_assumed_blockchain_size = 0;
+            m_assumed_chain_state_size = 0;
+            chainTxData = ChainTxData{0, 0, 0};
         } else {
             bin = *options.challenge;
             consensus.nMinimumChainWork = uint256{};
@@ -438,7 +414,7 @@ public:
         uint256 hash = h.GetHash();
         std::copy_n(hash.begin(), 4, pchMessageStart.begin());
 
-        nDefaultPort = 38333;
+        nDefaultPort = 51475; // COINWOW signet (Bitcoin signet uses 38333)
         nPruneAfterHeight = 1000;
         genesis = CreateGenesisBlock(1754491528, 0, 0x207fffff, 1, 7000000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
