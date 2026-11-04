@@ -1,8 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: COINWOW
-Upstream-Contact: Satoshi Nakamoto <satoshin@gmx.com>
- irc://#coinwow-core-dev@libera.chat
-Source: https://github.com/coinwow/coinwow
+Upstream-Contact: COINWOW <legal@coinwow.ca>
+Source: https://github.com/COINWOW/COINWOW
 
 Files: *
 Copyright: 2009-2026, Bitcoin Core Developers
