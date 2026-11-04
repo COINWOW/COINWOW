@@ -3,9 +3,9 @@ COINWOW Core
 
 Setup
 ---------------------
-COINWOW Core is the original COINWOW client and it builds the backbone of the network. It downloads and, by default, stores the entire history of COINWOW transactions, which requires several hundred gigabytes or more of disk space. Depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to several days or more.
+COINWOW Core is the original COINWOW client and it builds the backbone of the network. It downloads and, by default, stores the entire history of COINWOW transactions, which requires disk space that grows with the chain. Depending on the speed of your computer and network connection, the synchronization process can take from a few minutes to a few hours.
 
-To download COINWOW Core, visit [bitcoincore.org](https://bitcoincore.org/en/download/).
+To download COINWOW Core, visit the [releases page](https://github.com/COINWOW/COINWOW/releases) and verify the file against the published `SHA256SUMS`.
 
 Running
 ---------------------
@@ -35,7 +35,7 @@ Drag COINWOW Core to your applications folder, and then run COINWOW Core.
 for help and more information.
 * Ask for help on [COINWOW StackExchange](https://bitcoin.stackexchange.com).
 * Ask for help on #coinwow on Libera Chat. If you don't have an IRC client, you can use [web.libera.chat](https://web.libera.chat/#coinwow).
-* Ask for help on the [COINWOWTalk](https://coinwowtalk.org/) forums, in the [Technical Support board](https://coinwowtalk.org/index.php?board=4.0).
+* Ask for help by opening an issue on [GitHub](https://github.com/COINWOW/COINWOW/issues).
 
 Building
 ---------------------
@@ -67,8 +67,7 @@ The COINWOW repo's [root README](/README.md) contains relevant information on th
 - [Internal Design Docs](design/)
 
 ### Resources
-* Discuss on the [COINWOWTalk](https://coinwowtalk.org/) forums, in the [Development & Technical Discussion board](https://coinwowtalk.org/index.php?board=6.0).
-* Discuss project-specific development on #coinwow-core-dev on Libera Chat. If you don't have an IRC client, you can use [web.libera.chat](https://web.libera.chat/#coinwow-core-dev).
+* Discuss on [GitHub](https://github.com/COINWOW/COINWOW/issues).
 
 ### Miscellaneous
 - [Assets Attribution](assets-attribution.md)

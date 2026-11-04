@@ -36,8 +36,6 @@ list or changes that are
 Some of them might no longer be applicable. So if you are interested, but
 unsure, you might want to leave a comment on the issue first.
 
-You may also participate in the [COINWOW Core PR Review Club](https://coinwowcore.reviews/).
-
 ### Good First Issue Label
 
 The purpose of the `good first issue` label is to highlight which issues are
@@ -54,21 +52,11 @@ and is also an effective way to request assistance if and when you need it.
 Communication Channels
 ----------------------
 
-Most communication about COINWOW Core development happens on IRC, in the
-`#coinwow-core-dev` channel on Libera Chat. The easiest way to participate on IRC is
-with the web client, [web.libera.chat](https://web.libera.chat/#coinwow-core-dev). Chat
-history logs can be found
-on [https://www.erisian.com.au/coinwow-core-dev/](https://www.erisian.com.au/coinwow-core-dev/)
-and [https://gnusha.org/coinwow-core-dev/](https://gnusha.org/coinwow-core-dev/).
-
 Discussion about codebase improvements happens in GitHub issues and pull
-requests.
+requests: https://github.com/COINWOW/COINWOW/issues
 
-The developer
-[mailing list](https://groups.google.com/g/coinwowdev)
-should be used to discuss complicated or controversial consensus or P2P protocol changes before working on
-a patch set.
-Archives can be found on [https://gnusha.org/pi/coinwowdev/](https://gnusha.org/pi/coinwowdev/).
+Complicated or controversial consensus or P2P protocol changes should be
+discussed in a GitHub issue before working on a patch set.
 
 
 Contributor Workflow
@@ -84,8 +72,7 @@ To contribute a patch, the workflow is as follows:
   1. Create topic branch
   1. Commit patches
 
-For GUI-related issues or pull requests, the https://github.com/bitcoin-core/gui repository should be used.
-For all other issues and pull requests, the https://github.com/coinwow/coinwow node repository should be used.
+All issues and pull requests (including GUI-related ones) should be submitted to https://github.com/COINWOW/COINWOW.
 
 The master branch for all monotree repositories is identical.
 
@@ -177,7 +164,7 @@ subsequent comment to the PR.
 ### Translation changes
 
 Note that translations should not be submitted as pull requests. Please see
-[Translation Process](https://github.com/coinwow/coinwow/blob/master/doc/translation_process.md)
+[Translation Process](https://github.com/COINWOW/COINWOW/blob/main/doc/translation_process.md)
 for more information on helping with translations.
 
 ### Work in Progress Changes and Requests for Comments
