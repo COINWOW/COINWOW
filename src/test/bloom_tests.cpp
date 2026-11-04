@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2012-2022 The COINWOW Core developers
+// Copyright (c) 2012-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -88,7 +83,7 @@ BOOST_AUTO_TEST_CASE(bloom_create_insert_serialize_with_tweak)
 
 BOOST_AUTO_TEST_CASE(bloom_create_insert_key)
 {
-    std::string strSecret = std::string("5Kg1gnAjaLfKiwhhPpGS3QfRg2m6awQvaj98JCZBZQ5SuS2F15C");
+    std::string strSecret = std::string("6G6rdGjdSFbfVuySn3eQkPT7KE1Cnf1Scd898PpHPkGJiswpUuF");
     CKey key = DecodeSecret(strSecret);
     CPubKey pubkey = key.GetPubKey();
     std::vector<unsigned char> vchPubKey(pubkey.begin(), pubkey.end());

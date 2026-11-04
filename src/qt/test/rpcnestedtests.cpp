@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2016-2021 The COINWOW Core developers
+// Copyright (c) 2016-2021 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -88,7 +83,7 @@ void RPCNestedTests::rpcNestedTests()
     QVERIFY(result == result2);
 
     RPCConsole::RPCExecuteCommandLine(m_node, result, "getblock(getbestblockhash())[tx][0]", &filtered);
-    QVERIFY(result == "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b");
+    QVERIFY(result == "6c18b005f11540a0484181be1e1011503bc38afccef34e22dbe871495de0075a");
     QVERIFY(filtered == "getblock(getbestblockhash())[tx][0]");
 
     RPCConsole::RPCParseCommandLine(nullptr, result, "signmessagewithprivkey abc", false, &filtered);

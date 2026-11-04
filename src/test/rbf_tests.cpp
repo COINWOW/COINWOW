@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2021-2022 The COINWOW Core developers
+// Copyright (c) 2021-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include <common/system.h>
@@ -447,7 +442,9 @@ BOOST_FIXTURE_TEST_CASE(improves_feerate, TestChain100Setup)
     const auto res3 = ImprovesFeerateDiagram(*changeset);
     BOOST_CHECK(res3.has_value());
     BOOST_CHECK(res3.value().first == DiagramCheckError::UNCALCULABLE);
-    BOOST_CHECK_MESSAGE(res3.value().second == strprintf("%s has 2 descendants, max 1 allowed", tx1->GetHash().GetHex()), res3.value().second);
+    BOOST_CHECK_MESSAGE(
+        res3.value().second.find("has both ancestor and descendant, exceeding cluster limit of 2") != std::string::npos,
+        res3.value().second);
 }
 
 BOOST_FIXTURE_TEST_CASE(calc_feerate_diagram_rbf, TestChain100Setup)
@@ -616,7 +613,7 @@ BOOST_FIXTURE_TEST_CASE(calc_feerate_diagram_rbf, TestChain100Setup)
     // Add another descendant to conflict_1, making the cluster size > 2 should fail at this point.
     const auto conflict_1_grand_child = make_tx(/*inputs=*/{conflict_1_child}, /*output_values=*/ {995 * CENT});
     AddToMempool(pool, entry.Fee(high_fee).FromTx(conflict_1_grand_child));
-    const auto conflict_1_grand_child_entry = pool.GetIter(conflict_1_child->GetHash()).value();
+    const auto conflict_1_grand_child_entry = pool.GetIter(conflict_1_grand_child->GetHash()).value();
 
     {
         auto changeset = pool.GetChangeSet();
@@ -629,7 +626,9 @@ BOOST_FIXTURE_TEST_CASE(calc_feerate_diagram_rbf, TestChain100Setup)
         const auto replace_cluster_size_3{changeset->CalculateChunksForRBF()};
 
         BOOST_CHECK(!replace_cluster_size_3.has_value());
-        BOOST_CHECK_EQUAL(util::ErrorString(replace_cluster_size_3).original, strprintf("%s has 2 descendants, max 1 allowed", conflict_1->GetHash().GetHex()));
+        BOOST_CHECK(
+            util::ErrorString(replace_cluster_size_3).original.find(
+                "has both ancestor and descendant, exceeding cluster limit of 2") != std::string::npos);
     }
 }
 

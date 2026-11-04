@@ -1,11 +1,6 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2009-present The COINWOW Core developers
+// Copyright (c) 2009-2021 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -40,8 +35,8 @@ const CBaseChainParams& BaseParams()
 }
 
 /**
- * Port numbers for incoming Tor connections (8334, 18334, 38334, 48334, 18445) have
- * been chosen arbitrarily to keep ranges of used ports tight.
+ * RPC ports. COINWOW P2P ports are: main 51445, testnet3 51455, testnet4 51465,
+ * signet 51475, regtest 18444 (see kernel/chainparams.cpp).
  */
 std::unique_ptr<CBaseChainParams> CreateBaseChainParams(const ChainType chain)
 {
@@ -49,11 +44,11 @@ std::unique_ptr<CBaseChainParams> CreateBaseChainParams(const ChainType chain)
     case ChainType::MAIN:
         return std::make_unique<CBaseChainParams>("", 51446);
     case ChainType::TESTNET:
-        return std::make_unique<CBaseChainParams>("testnet3", 18332);
+        return std::make_unique<CBaseChainParams>("testnet3", 51454);
     case ChainType::TESTNET4:
-        return std::make_unique<CBaseChainParams>("testnet4", 48332);
+        return std::make_unique<CBaseChainParams>("testnet4", 51464);
     case ChainType::SIGNET:
-        return std::make_unique<CBaseChainParams>("signet", 38332);
+        return std::make_unique<CBaseChainParams>("signet", 51474);
     case ChainType::REGTEST:
         return std::make_unique<CBaseChainParams>("regtest", 18443);
     }

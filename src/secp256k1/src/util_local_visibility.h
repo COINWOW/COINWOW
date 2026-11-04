@@ -1,14 +1,8 @@
-/* Copyright (C) 2009-2025 Bitcoin Core developers */
-
-/* Copyright (C) 2025-2026 COINWOW developers */
-
-/* Distributed under the MIT software license */
-
 #ifndef SECP256K1_LOCAL_VISIBILITY_H
 #define SECP256K1_LOCAL_VISIBILITY_H
 
 /* Global variable visibility */
-/* See: https://github.com/coinwow-core/secp256k1/issues/1181 */
+/* See: https://github.com/bitcoin-core/secp256k1/issues/1181 */
 #if !defined(_WIN32) && defined(__GNUC__) && (__GNUC__ >= 4)
 # define SECP256K1_LOCAL_VAR extern __attribute__ ((visibility ("hidden")))
 #else

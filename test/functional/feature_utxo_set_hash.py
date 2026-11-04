@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020-2022 The COINWOW Core developers
+# Copyright (c) 2020-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test UTXO set hash value calculation in gettxoutsetinfo."""
@@ -67,8 +68,8 @@ class UTXOSetHashTest(COINWOWTestFramework):
         assert_equal(finalized[::-1].hex(), node_muhash)
 
         self.log.info("Test deterministic UTXO set hash results")
-        assert_equal(node.gettxoutsetinfo()['hash_serialized_3'], "e0b4c80f2880985fdf1adc331ed0735ac207588f986c91c7c05e8cf5fe6780f0")
-        assert_equal(node.gettxoutsetinfo("muhash")['muhash'], "8739b878f23030ef39a5547edc7b57f88d50fdaaf47314ff0524608deb13067e")
+        assert_equal(node.gettxoutsetinfo()['hash_serialized_3'], "ea8e403430f9b8c7f12ed48f5a63be6126efc0a0da5ab7510e6d52a3d281bd7e")
+        assert_equal(node.gettxoutsetinfo("muhash")['muhash'], "007917f81dcb39f14a4d3ca377024fee92184f03ae590d2198024a6a7a5873cb")
 
     def run_test(self):
         self.test_muhash_implementation()

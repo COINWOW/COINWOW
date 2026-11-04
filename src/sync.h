@@ -1,11 +1,6 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2022 The COINWOW Core developers
+// Copyright (c) 2009-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -142,7 +137,7 @@ using Mutex = AnnotatedMixin<std::mutex>;
  * eventually move all the mutexes into classes so they are not globally
  * visible.
  *
- * See: https://github.com/coinwow/coinwow/pull/20272#issuecomment-720755781
+ * See: https://github.com/bitcoin/bitcoin/pull/20272#issuecomment-720755781
  */
 class GlobalMutex : public Mutex { };
 

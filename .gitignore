@@ -27,3 +27,6 @@ wallets/
 .idea/
 .DS_Store
 build-win/
+
+# Local tooling binaries (e.g. BFG Repo-Cleaner) must never be committed
+*.jar

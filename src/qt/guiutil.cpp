@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2011-present The COINWOW Core developers
+// Copyright (c) 2011-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,7 +31,6 @@
 #ifdef WIN32
 #include <shellapi.h>
 #include <shlobj.h>
-#include <shlwapi.h>
 #endif
 
 #include <QAbstractButton>
@@ -564,8 +558,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 
             // Set the path to the shortcut target
             psl->SetPath(pszExePath);
-            PathRemoveFileSpecW(pszExePath);
-            psl->SetWorkingDirectory(pszExePath);
+            const fs::path exe_path{pszExePath};
+            psl->SetWorkingDirectory(exe_path.parent_path().c_str());
             psl->SetShowCmd(SW_SHOWMINNOACTIVE);
             psl->SetArguments(strArgs.toStdWString().c_str());
 

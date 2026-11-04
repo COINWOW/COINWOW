@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) The COINWOW Core developers
+// Copyright (c) The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -37,7 +32,7 @@ static constexpr unsigned MAX_CLUSTER_COUNT_LIMIT{64};
  * be close to the optimal order those transactions should be mined in if the goal is fee
  * maximization, though this is a best effort only, not a strong guarantee.
  *
- * For more explanation, see https://delvingcoinwow.org/t/introduction-to-cluster-linearization/1032
+ * For more explanation, see https://delvingbitcoin.org/t/introduction-to-cluster-linearization/1032
  *
  * This linearization is partitioned into chunks: groups of transactions that according to this
  * order would be mined together. Each chunk consists of the highest-feerate prefix of what remains

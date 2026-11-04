@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2022-present The COINWOW Core developers
+# Copyright (c) 2022-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -202,7 +203,7 @@ class UTXOCacheTracepointTest(COINWOWTestFramework):
                 assert_equal(block_1_coinbase_txid, bytes(event.txid[::-1]).hex())
                 assert_equal(0, event.index)  # prevout index
                 assert_equal(EARLY_BLOCK_HEIGHT, event.height)
-                assert_equal(50 * COIN, event.value)
+                assert_equal(25 * COIN, event.value)
                 assert_equal(True, event.is_coinbase)
             except AssertionError:
                 self.log.exception("Assertion failed")

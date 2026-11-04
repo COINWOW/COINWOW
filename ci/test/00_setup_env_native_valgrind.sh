@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2019-present The COINWOW Core developers
+# Copyright (c) 2019-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,7 +12,7 @@ export CONTAINER_NAME=ci_native_valgrind
 export PACKAGES="valgrind python3-zmq libevent-dev libboost-dev libzmq3-dev libsqlite3-dev"
 export USE_VALGRIND=1
 export NO_DEPENDS=1
-# bind tests excluded for now, see https://github.com/coinwow/coinwow/issues/17765#issuecomment-602068547
+# bind tests excluded for now, see https://github.com/bitcoin/bitcoin/issues/17765#issuecomment-602068547
 export TEST_RUNNER_EXTRA="--exclude rpc_bind,feature_bind_extra"
 export GOAL="install"
 # TODO enable GUI

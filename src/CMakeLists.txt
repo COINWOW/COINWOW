@@ -1,4 +1,5 @@
-# Copyright (c) 2025-present The COINWOW Core developers
+# Copyright (c) 2023-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
@@ -18,7 +19,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 include(../cmake/crc32c.cmake)
 include(../cmake/leveldb.cmake)
 include(../cmake/minisketch.cmake)
-add_subdirectory(kernel)
 add_subdirectory(univalue)
 if (ENABLE_IPC AND NOT WITH_EXTERNAL_LIBMULTIPROCESS)
   include(../cmake/libmultiprocess.cmake)
@@ -461,7 +461,7 @@ if(BUILD_UTIL_CHAINSTATE)
   #       perform binary checks after the installation step.
   # Relevant discussions:
   # - https://github.com/hebasto/coinwow/pull/236#issuecomment-2183120953
-  # - https://github.com/coinwow/coinwow/pull/30312#issuecomment-2191235833
+  # - https://github.com/bitcoin/bitcoin/pull/30312#issuecomment-2191235833
   set_target_properties(coinwow-chainstate PROPERTIES
     SKIP_BUILD_RPATH OFF
   )

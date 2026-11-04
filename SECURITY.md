@@ -2,19 +2,28 @@
 
 ## Supported Versions
 
-See our website for versions of COINWOW Core that are currently supported with
-security updates: https://coinwowcore.org/en/lifecycle/#schedule
+| Version            | Supported with security fixes |
+|--------------------|-------------------------------|
+| 1.0.x              | Yes                           |
+| 29.99.x and older pre-release builds | No — please upgrade to the latest 1.0.x release |
 
 ## Reporting a Vulnerability
 
-To report security issues send an email to security@coinwowcore.org (not for support).
+Please **do not** open a public GitHub issue for security problems
+(consensus bugs, remote crashes, wallet key exposure, network-level denial of
+service, etc.).
 
-The following keys may be used to communicate sensitive information to developers:
+Report them privately through GitHub's private vulnerability reporting:
 
-| Name | Fingerprint |
-|------|-------------|
-| Pieter Wuille | 133E AC17 9436 F14A 5CF1  B794 860F EB80 4E66 9320 |
-| Michael Ford | E777 299F C265 DD04 7930  70EB 944D 35F9 AC3D B76A |
-| Ava Chow | 1528 1230 0785 C964 44D3  334D 1756 5732 E08E 5E41 |
+  https://github.com/COINWOW/COINWOW/security/advisories/new
 
-You can import a key by running the following command with that individual’s fingerprint: `gpg --keyserver hkps://keys.openpgp.org --recv-keys "<fingerprint>"` Ensure that you put quotes around fingerprints containing spaces.
+Include, where possible: affected version or commit, platform, steps to
+reproduce, and the impact you observed. You will receive an acknowledgement
+as soon as the report has been reviewed.
+
+COINWOW Core is derived from Bitcoin Core. If you believe a vulnerability
+also affects upstream Bitcoin Core, please additionally report it to the
+Bitcoin Core project following
+[its own security policy](https://github.com/bitcoin/bitcoin/blob/master/SECURITY.md).
+Vulnerabilities in the vendored `libsecp256k1` library should be reported
+upstream as described in [`src/secp256k1/SECURITY.md`](src/secp256k1/SECURITY.md).

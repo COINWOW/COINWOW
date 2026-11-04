@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2025 The COINWOW Core developers
+// Copyright (c) 2025-present The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -193,7 +188,7 @@ static void ExecCommand(const std::vector<const char*>& args, std::string_view w
     // specified executable. Avoid doing this if it looks like the wrapper
     // executable was invoked by path, rather than by search, to avoid
     // unintentionally launching system executables in a local build.
-    // (https://github.com/coinwow/coinwow/pull/31375#discussion_r1861814807)
+    // (https://github.com/bitcoin/bitcoin/pull/31375#discussion_r1861814807)
     const bool fallback_os_search{!fs::PathFromString(std::string{wrapper_argv0}).has_parent_path()};
 
     // If wrapper is installed in a bin/ directory, look for target executable

@@ -1,4 +1,5 @@
-# Copyright (c) 2023-present The COINWOW Core developers
+# Copyright (c) 2023-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
@@ -143,7 +144,6 @@ target_link_libraries(coinwowqt
     Boost::headers
     $<TARGET_NAME_IF_EXISTS:QRencode::QRencode>
     $<$<PLATFORM_ID:Darwin>:-framework\ AppKit>
-    $<$<CXX_COMPILER_ID:MSVC>:shlwapi>
 )
 
 if(ENABLE_WALLET)
@@ -262,7 +262,6 @@ target_link_libraries(coinwow-qt
   core_interface
   coinwowqt
   coinwow_node
-  $<$<PLATFORM_ID:Windows>:Shlwapi>
 )
 
 import_plugins(coinwow-qt)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2018-present The COINWOW Core developers
+# Copyright (c) 2018-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
@@ -160,7 +161,7 @@ def download_binary(tag, args) -> int:
         archive_format = 'zip'
 
     archive = f'coinwow-{tag[1:]}-{host}.{archive_format}'
-    archive_url = f'https://coinwowcore.org/{bin_path}/{archive}'
+    archive_url = f'https://bitcoincore.org/{bin_path}/{archive}'
 
     print(f'Fetching: {archive_url}')
 

@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2024-present The COINWOW Core developers
+// Copyright (c) 2024-present The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -154,7 +149,7 @@ BOOST_AUTO_TEST_CASE(feefrac_operators)
     FeeFrac max_fee2{1, 1};
     BOOST_CHECK(max_fee >= max_fee2);
 
-    // Test for integer overflow issue (https://github.com/coinwow/coinwow/issues/32294)
+    // Test for integer overflow issue (https://github.com/bitcoin/bitcoin/issues/32294)
     BOOST_CHECK_EQUAL((FeeFrac{0x7ffffffdfffffffb, 0x7ffffffd}.EvaluateFeeDown(0x7fffffff)), 0x7fffffffffffffff);
 }
 

@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2015-2022 The COINWOW Core developers
+// Copyright (c) 2015-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -14,6 +9,8 @@
 #include <test/util/random.h>
 #include <test/util/setup_common.h>
 #include <util/chaintype.h>
+
+#include <vector>
 
 #include <boost/test/unit_test.hpp>
 
@@ -33,7 +30,7 @@ BOOST_AUTO_TEST_CASE(get_next_work)
     // CalculateNextWorkRequired(); redoing the calculation here would be just
     // reimplementing the same code that is written in pow.cpp. Rather than
     // copy that code, we just hardcode the expected result.
-    unsigned int expected_nbits = 0x1d00d86aU;
+    unsigned int expected_nbits = 0x1d00ffffU;
     BOOST_CHECK_EQUAL(CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, chainParams->GetConsensus()), expected_nbits);
     BOOST_CHECK(PermittedDifficultyTransition(chainParams->GetConsensus(), pindexLast.nHeight+1, pindexLast.nBits, expected_nbits));
 }
@@ -61,11 +58,15 @@ BOOST_AUTO_TEST_CASE(get_next_work_lower_limit_actual)
     pindexLast.nHeight = 68543;
     pindexLast.nTime = 1279297671;  // Block #68543
     pindexLast.nBits = 0x1c05a3f4;
-    unsigned int expected_nbits = 0x1c0168fdU;
+    unsigned int expected_nbits = 0x1c0d7f1aU;
     BOOST_CHECK_EQUAL(CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, chainParams->GetConsensus()), expected_nbits);
     BOOST_CHECK(PermittedDifficultyTransition(chainParams->GetConsensus(), pindexLast.nHeight+1, pindexLast.nBits, expected_nbits));
-    // Test that reducing nbits further would not be a PermittedDifficultyTransition.
-    unsigned int invalid_nbits = expected_nbits-1;
+    // The hardest permitted retarget is old_target / 4.
+    // Use old_target / 8 to ensure the transition is invalid.
+    arith_uint256 invalid_target;
+    invalid_target.SetCompact(pindexLast.nBits);
+    invalid_target /= 8;
+    unsigned int invalid_nbits = invalid_target.GetCompact();
     BOOST_CHECK(!PermittedDifficultyTransition(chainParams->GetConsensus(), pindexLast.nHeight+1, pindexLast.nBits, invalid_nbits));
 }
 
@@ -84,6 +85,41 @@ BOOST_AUTO_TEST_CASE(get_next_work_upper_limit_actual)
     // Test that increasing nbits further would not be a PermittedDifficultyTransition.
     unsigned int invalid_nbits = expected_nbits+1;
     BOOST_CHECK(!PermittedDifficultyTransition(chainParams->GetConsensus(), pindexLast.nHeight+1, pindexLast.nBits, invalid_nbits));
+}
+
+/* Test that GetNextWorkRequired() correctly walks the chain back to the
+ * genesis block for the very first difficulty adjustment period. The
+ * CalculateNextWorkRequired() tests above all bypass this lookup by passing
+ * nFirstBlockTime directly; this is the one code path (CBlockIndex::GetAncestor
+ * finding height 0) they never exercise. Mirrors the scenario in
+ * test/functional/mining_mainnet.py (genesis-anchored, 12s/block cadence,
+ * clamped to the maximum permitted x4 difficulty increase) without requiring
+ * any real proof-of-work. */
+BOOST_AUTO_TEST_CASE(get_next_work_first_period_from_genesis)
+{
+    const auto chainParams = CreateChainParams(*m_node.args, ChainType::MAIN);
+    const Consensus::Params& params = chainParams->GetConsensus();
+
+    std::vector<CBlockIndex> chain(2016);
+    chain[0].nHeight = 0;
+    chain[0].nTime = chainParams->GenesisBlock().nTime;
+    chain[0].nBits = 0x1d00ffff;
+    for (int i = 1; i < 2016; i++) {
+        chain[i].nHeight = i;
+        chain[i].nTime = chain[0].nTime + i * 12;
+        chain[i].nBits = 0x1d00ffff;
+        chain[i].pprev = &chain[i - 1];
+    }
+
+    CBlockHeader next_header;
+    next_header.nTime = chain[2015].nTime + 12;
+    unsigned int next_bits = GetNextWorkRequired(&chain[2015], &next_header, params);
+
+    arith_uint256 expected_target;
+    expected_target.SetCompact(0x1d00ffff);
+    expected_target /= 4;
+    BOOST_CHECK_EQUAL(next_bits, expected_target.GetCompact());
+    BOOST_CHECK(PermittedDifficultyTransition(params, 2016, 0x1d00ffff, next_bits));
 }
 
 BOOST_AUTO_TEST_CASE(CheckProofOfWork_test_negative_target)

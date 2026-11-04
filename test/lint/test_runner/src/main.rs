@@ -1,4 +1,5 @@
-// Copyright (c) The COINWOW Core developers
+// Copyright (c) The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or https://opensource.org/license/mit/.
 
@@ -475,7 +476,6 @@ fn get_pathspecs_exclude_whitespace() -> Vec<String> {
             // Permanent excludes
             "*.patch",
             "src/qt/locale",
-            "contrib/windeploy/win-codesign.cert",
             "doc/README_windows.txt",
             // Temporary excludes, or existing violations
             "contrib/init/coinwowd.openrc",

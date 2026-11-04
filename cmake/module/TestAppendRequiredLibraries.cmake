@@ -1,4 +1,5 @@
-# Copyright (c) 2023-present The COINWOW Core developers
+# Copyright (c) 2023-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
@@ -7,7 +8,7 @@ include_guard(GLOBAL)
 # Illumos/SmartOS requires linking with -lsocket if
 # using getifaddrs & freeifaddrs.
 # See:
-# - https://github.com/coinwow/coinwow/pull/21486
+# - https://github.com/bitcoin/bitcoin/pull/21486
 # - https://smartos.org/man/3socket/getifaddrs
 function(test_append_socket_library target)
   if (NOT TARGET ${target})

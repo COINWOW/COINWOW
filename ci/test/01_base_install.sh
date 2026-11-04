@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2018-present The COINWOW Core developers
+# Copyright (c) 2018-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -24,7 +25,7 @@ fi
 if [ -n "${APT_LLVM_V}" ]; then
   ${CI_RETRY_EXE} apt-get update
   ${CI_RETRY_EXE} apt-get install curl -y
-  curl "https://apt.llvm.org/llvm-snapshot.gpg.key" | tee "/etc/apt/trusted.gpg.d/apt.llvm.org.asc"
+  ${CI_RETRY_EXE} curl --location --fail "https://apt.llvm.org/llvm-snapshot.gpg.key" -o "/etc/apt/trusted.gpg.d/apt.llvm.org.asc"
   (
     # shellcheck disable=SC2034
     source /etc/os-release

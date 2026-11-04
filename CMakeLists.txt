@@ -1,4 +1,5 @@
-# Copyright (c) 2025-present The COINWOW Core developers
+# Copyright (c) 2023-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
@@ -27,12 +28,12 @@ get_directory_property(precious_variables CACHE_VARIABLES)
 # Project / Package metadata
 #=============================
 set(CLIENT_NAME "COINWOW Core")
-set(CLIENT_VERSION_MAJOR 29)
-set(CLIENT_VERSION_MINOR 99)
+set(CLIENT_VERSION_MAJOR 1)
+set(CLIENT_VERSION_MINOR 0)
 set(CLIENT_VERSION_BUILD 0)
 set(CLIENT_VERSION_RC 0)
-set(CLIENT_VERSION_IS_RELEASE "false")
-set(COPYRIGHT_YEAR "2025")
+set(CLIENT_VERSION_IS_RELEASE "true")
+set(COPYRIGHT_YEAR "2026")
 
 # During the enabling of the CXX and CXXOBJ languages, we modify
 # CMake's compiler/linker invocation strings by appending the content
@@ -107,11 +108,7 @@ option(BUILD_UTIL "Build coinwow-util executable." ${BUILD_TESTS})
 
 option(BUILD_UTIL_CHAINSTATE "Build experimental coinwow-chainstate executable." OFF)
 option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ${BUILD_UTIL_CHAINSTATE})
-option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ON)
 
-if(BUILD_KERNEL_LIB)
-  add_subdirectory(src/kernel)
-endif()
 add_subdirectory(src/consensus)
 option(ENABLE_WALLET "Enable wallet." ON)
 if(ENABLE_WALLET)
@@ -128,7 +125,6 @@ option(REDUCE_EXPORTS "Attempt to reduce exported symbols in the resulting execu
 option(WERROR "Treat compiler warnings as errors." OFF)
 option(WITH_CCACHE "Attempt to use ccache for compiling." ON)
 
-find_package(OpenSSL REQUIRED)
 
 option(WITH_ZMQ "Enable ZMQ notifications." OFF)
 if(WITH_ZMQ)
@@ -315,7 +311,7 @@ if(WIN32)
 
   # Workaround producing large object files, which cannot be handled by the assembler.
   # More likely to happen with no, or lower levels of optimisation.
-  # See discussion in https://github.com/coinwow/coinwow/issues/28109.
+  # See discussion in https://github.com/bitcoin/bitcoin/issues/28109.
   if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     try_append_cxx_flags("/bigobj" TARGET core_interface_debug SKIP_LINK)
   else()
@@ -560,7 +556,7 @@ else()
   # `PT_LOAD` segments and binaries linked with `-z separate-code`
   # have 4 `PT_LOAD` segments.
   # Relevant discussions:
-  # - https://github.com/coinwow/coinwow/pull/28724#issuecomment-2589347934
+  # - https://github.com/bitcoin/bitcoin/pull/28724#issuecomment-2589347934
   # - https://mail-index.netbsd.org/tech-userlevel/2023/01/05/msg013666.html
   if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD" AND CMAKE_SYSTEM_VERSION VERSION_LESS 11.0)
     try_append_linker_flag("-Wl,-z,noseparate-code" TARGET core_interface)
@@ -632,7 +628,7 @@ endif()
 #       perform binary checks after the installation step.
 # Relevant discussions:
 # - https://github.com/hebasto/coinwow/pull/236#issuecomment-2183120953
-# - https://github.com/coinwow/coinwow/pull/30312#issuecomment-2191235833
+# - https://github.com/bitcoin/bitcoin/pull/30312#issuecomment-2191235833
 # NetBSD always requires runtime paths to be set for executables.
 if(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -721,6 +717,4 @@ endif()
 
 # We want all build properties to be encapsulated properly.
 include(WarnAboutGlobalProperties)
-add_executable(genesis_miner src/genesis_miner.cpp)
-target_link_libraries(genesis_miner bitcoinkernel coinwow_consensus OpenSSL::SSL OpenSSL::Crypto)
 

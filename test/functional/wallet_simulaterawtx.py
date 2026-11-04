@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2021-2022 The COINWOW Core developers
+# Copyright (c) 2021-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test simulaterawtransaction.
@@ -38,7 +39,7 @@ class SimulateTxTest(COINWOWTestFramework):
         w2 = node.get_wallet_rpc('w2')
 
         self.generatetoaddress(node, COINBASE_MATURITY + 1, w0.getnewaddress())
-        assert_equal(w0.getbalance(), 50.0)
+        assert_equal(w0.getbalance(), 25.0)
         assert_equal(w1.getbalance(), 0.0)
 
         address1 = w1.getnewaddress()

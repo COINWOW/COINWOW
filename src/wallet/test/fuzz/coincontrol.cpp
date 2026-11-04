@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2022 The COINWOW Core developers
+// Copyright (c) 2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -18,11 +13,11 @@
 namespace wallet {
 namespace {
 
-const TestingSetup* g_setup;
+const BasicTestingSetup* g_setup;
 
 void initialize_coincontrol()
 {
-    static const auto testing_setup = MakeNoLogFileContext<const TestingSetup>();
+    static const auto testing_setup = MakeNoLogFileContext<const BasicTestingSetup>();
     g_setup = testing_setup.get();
 }
 

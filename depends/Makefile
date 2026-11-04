@@ -41,7 +41,7 @@ NO_ZMQ ?=
 NO_USDT ?=
 MULTIPROCESS ?=
 LTO ?=
-FALLBACK_DOWNLOAD_PATH ?= https://coinwowcore.org/depends-sources
+FALLBACK_DOWNLOAD_PATH ?= https://bitcoincore.org/depends-sources
 
 C_STANDARD ?= c11
 CXX_STANDARD ?= c++20

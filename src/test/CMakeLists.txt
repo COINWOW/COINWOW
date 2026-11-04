@@ -1,4 +1,5 @@
-# Copyright (c) 2023-present The COINWOW Core developers
+# Copyright (c) 2023-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit/.
 
@@ -32,6 +33,7 @@ add_executable(test_coinwow
   coinscachepair_tests.cpp
   coinstatsindex_tests.cpp
   common_url_tests.cpp
+  coinwow_params_tests.cpp
   compilerbug_tests.cpp
   compress_tests.cpp
   crypto_tests.cpp

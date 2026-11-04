@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2014-present The COINWOW Core developers
+// Copyright (c) 2014-2021 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -18,8 +13,10 @@
 #include <util/strencodings.h>
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstring>
+#include <span>
 
 /// Maximum witness length for Bech32 addresses.
 static constexpr std::size_t BECH32_WITNESS_PROG_MAX_LEN = 40;
@@ -94,7 +91,8 @@ CTxDestination DecodeDestination(const std::string& str, const CChainParams& par
     error_str = "";
 
     // Note this will be false if it is a valid Bech32 address for a different network
-    bool is_bech32 = (ToLower(str.substr(0, params.Bech32HRP().size())) == params.Bech32HRP());
+    const std::string bech32_prefix = params.Bech32HRP() + "1";
+    bool is_bech32 = (ToLower(str.substr(0, bech32_prefix.size())) == bech32_prefix);
 
     if (!is_bech32 && DecodeBase58Check(str, data, 21)) {
         // base58-encoded COINWOW addresses.
@@ -247,14 +245,30 @@ std::string EncodeSecret(const CKey& key)
     return ret;
 }
 
+namespace {
+// BIP32 version bytes used for extended keys before the mainnet prefixes were
+// switched to xpub/xprv (i.e. tpub/tprv). They are still accepted when decoding
+// so that keys and wallet descriptors created by earlier versions stay readable,
+// but the regular Encode functions never produce them.
+constexpr std::array<unsigned char, 4> LEGACY_EXT_PUBLIC_KEY_PREFIX{0x04, 0x35, 0x87, 0xCF};
+constexpr std::array<unsigned char, 4> LEGACY_EXT_SECRET_KEY_PREFIX{0x04, 0x35, 0x83, 0x94};
+
+bool HasExtKeyPrefix(const std::vector<unsigned char>& data, std::span<const unsigned char> prefix)
+{
+    return data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin());
+}
+} // namespace
+
 CExtPubKey DecodeExtPubKey(const std::string& str)
 {
     CExtPubKey key;
     std::vector<unsigned char> data;
     if (DecodeBase58Check(str, data, 78)) {
         const std::vector<unsigned char>& prefix = Params().Base58Prefix(CChainParams::EXT_PUBLIC_KEY);
-        if (data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin())) {
+        if (HasExtKeyPrefix(data, prefix)) {
             key.Decode(data.data() + prefix.size());
+        } else if (HasExtKeyPrefix(data, LEGACY_EXT_PUBLIC_KEY_PREFIX)) {
+            key.Decode(data.data() + LEGACY_EXT_PUBLIC_KEY_PREFIX.size());
         }
     }
     return key;
@@ -270,14 +284,25 @@ std::string EncodeExtPubKey(const CExtPubKey& key)
     return ret;
 }
 
+std::string EncodeExtPubKeyLegacyPrefix(const CExtPubKey& key)
+{
+    std::vector<unsigned char> data(LEGACY_EXT_PUBLIC_KEY_PREFIX.begin(), LEGACY_EXT_PUBLIC_KEY_PREFIX.end());
+    const size_t size = data.size();
+    data.resize(size + BIP32_EXTKEY_SIZE);
+    key.Encode(data.data() + size);
+    return EncodeBase58Check(data);
+}
+
 CExtKey DecodeExtKey(const std::string& str)
 {
     CExtKey key;
     std::vector<unsigned char> data;
     if (DecodeBase58Check(str, data, 78)) {
         const std::vector<unsigned char>& prefix = Params().Base58Prefix(CChainParams::EXT_SECRET_KEY);
-        if (data.size() == BIP32_EXTKEY_SIZE + prefix.size() && std::equal(prefix.begin(), prefix.end(), data.begin())) {
+        if (HasExtKeyPrefix(data, prefix)) {
             key.Decode(data.data() + prefix.size());
+        } else if (HasExtKeyPrefix(data, LEGACY_EXT_SECRET_KEY_PREFIX)) {
+            key.Decode(data.data() + LEGACY_EXT_SECRET_KEY_PREFIX.size());
         }
     }
     if (!data.empty()) {

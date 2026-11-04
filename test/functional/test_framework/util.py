@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2022 The COINWOW Core developers
+# Copyright (c) 2014-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Helpful routines for regression testing."""
@@ -324,7 +325,7 @@ def wait_until_helper_internal(predicate, *, timeout=60, lock=None, timeout_fact
 def bpf_cflags():
     return [
         "-Wno-error=implicit-function-declaration",
-        "-Wno-duplicate-decl-specifier",  # https://github.com/coinwow/coinwow/issues/32322
+        "-Wno-duplicate-decl-specifier",  # https://github.com/bitcoin/bitcoin/issues/32322
     ]
 
 

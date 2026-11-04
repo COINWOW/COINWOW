@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2020-present The COINWOW Core developers
+# Copyright (c) 2020-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test error messages for 'getaddressinfo' and 'validateaddress' RPC commands."""
@@ -72,7 +73,7 @@ class InvalidAddressErrorMessageTest(COINWOWTestFramework):
         self.check_invalid(BECH32_ONE_ERROR, 'Invalid Bech32 checksum', [9])
         self.check_invalid(BECH32_TWO_ERRORS, 'Invalid Bech32 checksum', [22, 43])
         self.check_invalid(BECH32_ONE_ERROR_CAPITALS, 'Invalid Bech32 checksum', [38])
-        self.check_invalid(BECH32_NO_SEPARATOR, 'Missing separator')
+        self.check_invalid(BECH32_NO_SEPARATOR, 'Invalid or unsupported Segwit (Bech32) or Base58 encoding.')
         self.check_invalid(BECH32_INVALID_CHAR, 'Invalid Base 32 character', [8])
         self.check_invalid(BECH32_MULTISIG_TWO_ERRORS, 'Invalid Bech32 checksum', [19, 30])
         self.check_invalid(BECH32_WRONG_VERSION, 'Invalid Bech32 checksum', [5])

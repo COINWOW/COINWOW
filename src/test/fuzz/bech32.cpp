@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2019-present The COINWOW Core developers
+// Copyright (c) 2019-2021 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -36,7 +31,7 @@ FUZZ_TARGET(bech32_random_decode)
     }
 }
 
-// https://github.com/coinwow/bips/blob/master/bip-0173.mediawiki and https://github.com/coinwow/bips/blob/master/bip-0350.mediawiki
+// https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki and https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
 std::string GenerateRandomHRP(FuzzedDataProvider& fdp)
 {
     std::string hrp;

@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2009-present The COINWOW Core developers
+// Copyright (c) 2009-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -189,7 +184,7 @@ public:
     /**
      * Whether this object is a privacy network.
      * TODO: consider adding IsCJDNS() here when more peers adopt CJDNS, see:
-     * https://github.com/coinwow/coinwow/pull/27411#issuecomment-1497176155
+     * https://github.com/bitcoin/bitcoin/pull/27411#issuecomment-1497176155
      */
     [[nodiscard]] bool IsPrivacyNet() const { return IsTor() || IsI2P(); }
 

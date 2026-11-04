@@ -1,5 +1,6 @@
 #!/bin/sh
-# Copyright (c) 2014-2021 The COINWOW Core developers
+# Copyright (c) 2014-2021 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,7 +21,12 @@ WORKDIR=./.tmp
 OUTDIR="${WORKDIR}/out"
 OUTSUBDIR="${OUTDIR}/win"
 TIMESERVER=http://timestamp.comodoca.com
-CERTFILE="win-codesign.cert"
+# COINWOW does not ship a code-signing certificate. Provide the PEM
+# certificate chain of the COINWOW signing identity explicitly.
+if [ -z "$CERTFILE" ] || [ ! -f "$CERTFILE" ]; then
+  echo "error: set CERTFILE to the COINWOW code-signing certificate chain (PEM)"
+  exit 1
+fi
 
 stty -echo
 printf "Enter the passphrase for %s: " "$1"

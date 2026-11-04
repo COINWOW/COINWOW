@@ -1,9 +1,3 @@
-/* Copyright (C) 2009-2025 Bitcoin Core developers */
-
-/* Copyright (C) 2025-2026 COINWOW developers */
-
-/* Distributed under the MIT software license */
-
 #ifndef SECP256K1_MUSIG_H
 #define SECP256K1_MUSIG_H
 
@@ -18,7 +12,7 @@ extern "C" {
 
 /** This module implements BIP 327 "MuSig2 for BIP340-compatible
  *  Multi-Signatures"
- *  (https://github.com/coinwow/bips/blob/master/bip-0327.mediawiki)
+ *  (https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki)
  *  v1.0.0. You can find an example demonstrating the musig module in
  *  examples/musig.c.
  *

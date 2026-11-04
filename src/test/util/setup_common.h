@@ -1,16 +1,12 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2015-present The COINWOW Core developers
+// Copyright (c) 2015-present The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef COINWOW_TEST_UTIL_SETUP_COMMON_H
 #define COINWOW_TEST_UTIL_SETUP_COMMON_H
 
+#include <arith_uint256.h>
 #include <common/args.h> // IWYU pragma: export
 #include <kernel/caches.h>
 #include <kernel/context.h>
@@ -62,6 +58,7 @@ struct TestOpts {
     bool setup_net{true};
     bool setup_validation_interface{true};
     bool min_validation_cache{false}; // Equivalent of -maxsigcachebytes=0
+    std::optional<arith_uint256> minimum_chain_work{};
 };
 
 /** Basic testing setup.
@@ -100,7 +97,7 @@ struct BasicTestingSetup {
      * compatibility. In the future, it will point to m_args to further isolate
      * test environments.
      *
-     * @see https://github.com/coinwow/coinwow/issues/25055 for additional context.
+     * @see https://github.com/bitcoin/bitcoin/issues/25055 for additional context.
      */
     ArgsManager m_args;
 };

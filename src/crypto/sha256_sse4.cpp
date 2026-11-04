@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2017-present The COINWOW Core developers
+// Copyright (c) 2017-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 //
@@ -24,7 +19,7 @@ void Transform(uint32_t* s, const unsigned char* chunk, size_t blocks)
   clang is unable to compile this with -O0 and -fsanitize=address.
   See upstream bug: https://github.com/llvm/llvm-project/issues/92182.
   This also fails to compile with -O2, -fcf-protection & -fsanitize=address.
-  See https://github.com/coinwow/coinwow/issues/31913.
+  See https://github.com/bitcoin/bitcoin/issues/31913.
   */
 #if __has_feature(address_sanitizer)
   __attribute__((no_sanitize("address")))

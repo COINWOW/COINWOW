@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Copyright (c) 2019-2022 The COINWOW Core developers
+# Copyright (c) 2019-2022 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test p2p blocksonly mode & block-relay-only connections."""
@@ -67,7 +68,7 @@ class P2PBlocksOnly(COINWOWTestFramework):
             # and COINWOW Core respects that choice and will not send transactions.
             # But if, for some reason, first_peer decides to relay transactions to us anyway, we should relay them to
             # second_peer since we gave relay permission to first_peer.
-            # See https://github.com/coinwow/coinwow/issues/19943 for details.
+            # See https://github.com/bitcoin/bitcoin/issues/19943 for details.
             first_peer.send_without_ping(msg_tx(tx))
             self.log.info('Check that the peer with relay-permission is still connected after sending the transaction')
             assert_equal(first_peer.is_connected, True)

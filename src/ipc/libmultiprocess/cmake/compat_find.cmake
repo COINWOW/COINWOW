@@ -1,4 +1,5 @@
-# Copyright (c) 2024 The COINWOW Core developers
+# Copyright (c) 2024 The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@
 # https://sources.debian.org/patches/capnproto/1.0.1-4/07_libatomic.patch/ which
 # uses check_library_exists(atomic __atomic_load_8 ...) and it fails because the
 # symbol name conflicts with a compiler instrinsic as described
-# https://github.com/coinwow-core/libmultiprocess/issues/68#issuecomment-1135150171.
+# https://github.com/bitcoin-core/libmultiprocess/issues/68#issuecomment-1135150171.
 # This could be fixed by improving the check_library_exists function as
 # described in the github comment, or by changing the debian patch to check for
 # the symbol a different way, but simplest thing to do is work around the

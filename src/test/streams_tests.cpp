@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2012-present The COINWOW Core developers
+// Copyright (c) 2012-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -38,7 +33,7 @@ BOOST_AUTO_TEST_CASE(xor_file)
     }
     {
 #ifdef __MINGW64__
-        // Temporary workaround for https://github.com/coinwow/coinwow/issues/30210
+        // Temporary workaround for https://github.com/bitcoin/bitcoin/issues/30210
         const char* mode = "wb";
 #else
         const char* mode = "wbx";

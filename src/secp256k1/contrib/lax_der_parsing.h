@@ -1,9 +1,3 @@
-/* Copyright (C) 2009-2025 Bitcoin Core developers */
-
-/* Copyright (C) 2025-2026 COINWOW developers */
-
-/* Distributed under the MIT software license */
-
 /***********************************************************************
  * Copyright (c) 2015 Pieter Wuille                                    *
  * Distributed under the MIT software license, see the accompanying    *
@@ -80,7 +74,7 @@ extern "C" {
  *  This function will accept any valid DER encoded signature, even if the
  *  encoded numbers are out of range. In addition, it will accept signatures
  *  which violate the DER spec in various ways. Its purpose is to allow
- *  validation of the COINWOW blockchain, which includes non-DER signatures
+ *  validation of the Bitcoin blockchain, which includes non-DER signatures
  *  from before the network rules were updated to enforce DER. Note that
  *  the set of supported violations is a strict subset of what OpenSSL will
  *  accept.

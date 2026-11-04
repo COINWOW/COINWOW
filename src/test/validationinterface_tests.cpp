@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2020 The COINWOW Core developers
+// Copyright (c) 2020 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -83,7 +78,7 @@ public:
 
 // Regression test to ensure UnregisterAllValidationInterfaces calls don't
 // destroy a validation interface while it is being called. Bug:
-// https://github.com/coinwow/coinwow/pull/18551
+// https://github.com/bitcoin/bitcoin/pull/18551
 BOOST_AUTO_TEST_CASE(unregister_all_during_call)
 {
     bool destroyed = false;

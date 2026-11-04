@@ -5,8 +5,8 @@ body:
 - type: checkboxes
   id: acknowledgement
   attributes:
-    label: Issues, reports or feature requests related to the GUI should be opened directly on the GUI repo
-    description: https://github.com/coinwow-core/gui/issues/
+    label: This issue is about the COINWOW Core GUI (coinwow-qt)
+    description: COINWOW has no separate GUI repository; GUI issues are tracked here.
     options:
       - label: I still think this issue should be opened here
         required: true

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2018-present The COINWOW Core developers
+# Copyright (c) 2018-present The Bitcoin Core developers
+# Copyright (c) 2024-present COINWOW Developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -38,7 +39,7 @@ echo "=== END env ==="
   # The statistic bytes_written is only used for logging, which is disabled in
   # CI, so as a temporary minimal fix to work around UB and CI failures, leave
   # bytes_written unmodified.
-  # See https://github.com/coinwow/coinwow/pull/28359#issuecomment-1698694748
+  # See https://github.com/bitcoin/bitcoin/pull/28359#issuecomment-1698694748
   # Tee patch to stdout to make it clear CI is testing modified code.
   tee >(patch -p1) <<'EOF'
 --- a/src/leveldb/db/db_impl.cc
@@ -127,7 +128,7 @@ fi
 
 bash -c "cmake -S $BASE_ROOT_DIR $COINWOW_CONFIG_ALL $COINWOW_CONFIG || ( (cat $(cmake -P "${BASE_ROOT_DIR}/ci/test/GetCMakeLogFiles.cmake")) && false)"
 
-bash -c "cmake --build . $MAKEJOBS --target all $GOAL" || ( echo "Build failure. Verbose build follows." && cmake --build . --target all "$GOAL" --verbose ; false )
+bash -c "cmake --build . $MAKEJOBS --target all $GOAL" || ( echo "Build failure. Verbose build follows." && cmake --build . --target all $GOAL --verbose ; false )
 
 bash -c "${PRINT_CCACHE_STATISTICS}"
 du -sh "${DEPENDS_DIR}"/*/

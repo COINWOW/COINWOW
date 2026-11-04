@@ -12,7 +12,7 @@ Before starting this tutorial, start the coinwow node on the signet network.
 ./build/bin/coinwowd -signet -daemon
 ```
 
-This tutorial also uses the default WPKH derivation path to get the xpubs and does not conform to [BIP 45](https://github.com/coinwow/bips/blob/master/bip-0045.mediawiki) or [BIP 87](https://github.com/coinwow/bips/blob/master/bip-0087.mediawiki).
+This tutorial also uses the default WPKH derivation path to get the xpubs and does not conform to [BIP 45](https://github.com/bitcoin/bips/blob/master/bip-0045.mediawiki) or [BIP 87](https://github.com/bitcoin/bips/blob/master/bip-0087.mediawiki).
 
 At the time of writing, there is no way to extract a specific path from wallets in COINWOW Core. For this, an external signer/xpub can be used.
 
@@ -63,7 +63,7 @@ The following command can be used to verify if the xpub was generated correctly.
 for x in "${!xpubs[@]}"; do printf "[%s]=%s\n" "$x" "${xpubs[$x]}" ; done
 ```
 
-As previously mentioned, this step extracts the `m/84'/1'/0'` account instead of the path defined in [BIP 45](https://github.com/coinwow/bips/blob/master/bip-0045.mediawiki) or [BIP 87](https://github.com/coinwow/bips/blob/master/bip-0087.mediawiki), since there is no way to extract a specific path in COINWOW Core at the time of writing.
+As previously mentioned, this step extracts the `m/84'/1'/0'` account instead of the path defined in [BIP 45](https://github.com/bitcoin/bips/blob/master/bip-0045.mediawiki) or [BIP 87](https://github.com/bitcoin/bips/blob/master/bip-0087.mediawiki), since there is no way to extract a specific path in COINWOW Core at the time of writing.
 
 ### 1.2 Define the Multisig Descriptors
 
@@ -82,9 +82,9 @@ multisig_int_desc="{\"desc\": $internal_desc_sum, \"active\": true, \"internal\"
 multisig_desc="[$multisig_ext_desc, $multisig_int_desc]"
 ```
 
-`external_desc` and `internal_desc` specify the output type (`wsh`, in this case) and the xpubs involved. They also use BIP 67 (`sortedmulti`), so the wallet can be recreated without worrying about the order of xpubs. Conceptually, descriptors describe a list of scriptPubKey (along with information for spending from it) [[source](https://github.com/coinwow/coinwow/issues/21199#issuecomment-780772418)].
+`external_desc` and `internal_desc` specify the output type (`wsh`, in this case) and the xpubs involved. They also use BIP 67 (`sortedmulti`), so the wallet can be recreated without worrying about the order of xpubs. Conceptually, descriptors describe a list of scriptPubKey (along with information for spending from it) [[source](https://github.com/bitcoin/bitcoin/issues/21199#issuecomment-780772418)].
 
-Note that at least two descriptors are usually used, one for internal derivation paths and one for external ones. There are discussions about eliminating this redundancy, as can be seen in the issue [#17190](https://github.com/coinwow/coinwow/issues/17190).
+Note that at least two descriptors are usually used, one for internal derivation paths and one for external ones. There are discussions about eliminating this redundancy, as can be seen in the issue [#17190](https://github.com/bitcoin/bitcoin/issues/17190).
 
 After creating the descriptors, it is necessary to add the checksum, which is required by the `importdescriptors` RPC.
 
@@ -154,9 +154,9 @@ The `getbalances` RPC may be used to check the balance. Coins with `trusted` sta
 
 Unlike singlesig wallets, multisig wallets cannot create and sign transactions directly because they require the signatures of the co-signers. Instead they create a Partially Signed COINWOW Transaction (PSBT).
 
-PSBT is a data format that allows wallets and other tools to exchange information about a COINWOW transaction and the signatures necessary to complete it. [[source](https://coinwowops.org/en/topics/psbt/)]
+PSBT is a data format that allows wallets and other tools to exchange information about a COINWOW transaction and the signatures necessary to complete it. [[source](https://bitcoinops.org/en/topics/psbt/)]
 
-The current PSBT version (v0) is defined in [BIP 174](https://github.com/coinwow/bips/blob/master/bip-0174.mediawiki).
+The current PSBT version (v0) is defined in [BIP 174](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki).
 
 For simplicity, the destination address is taken from the `participant_1` wallet in the code above, but it can be any valid coinwow address.
 

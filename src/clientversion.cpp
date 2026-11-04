@@ -1,6 +1,7 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-// Copyright (C) 2025 COINWOW developers
-// Distributed under the MIT software license
+// Copyright (c) 2012-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <coinwow-build-config.h> // IWYU pragma: keep
 
@@ -60,7 +61,7 @@ std::string FormatFullVersion()
 }
 
 /**
- * Format the subversion field according to BIP 14 spec (https://github.com/coinwow/bips/blob/master/bip-0014.mediawiki)
+ * Format the subversion field according to BIP 14 spec (https://github.com/bitcoin/bips/blob/master/bip-0014.mediawiki)
  */
 std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments)
 {
@@ -72,20 +73,15 @@ std::string FormatSubVersion(const std::string& name, int nClientVersion, const 
 std::string CopyrightHolders(const std::string& strPrefix)
 {
     const auto copyright_devs = strprintf(_(COPYRIGHT_HOLDERS), COPYRIGHT_HOLDERS_SUBSTITUTION).translated;
-    std::string strCopyrightHolders = strPrefix + copyright_devs;
-
-    // Make sure COINWOW Core copyright is not removed by accident
-    if (copyright_devs.find("COINWOW Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The COINWOW Core developers";
-    }
-    return strCopyrightHolders;
+    return strPrefix + copyright_devs;
 }
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/MaSt3rGG1004/COINWOW>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/COINWOW/COINWOW>";
 
-    return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR).translated + " ") + "\n" +
+    return strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR).translated + " The Bitcoin Core developers\n" +
+           CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2024, COPYRIGHT_YEAR).translated + " ") + "\n" +
            "\n" +
            strprintf(_("Please contribute if you find %s useful. "
                        "Visit %s for further information about the software."),

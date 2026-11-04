@@ -1,10 +1,5 @@
-// Copyright (C) 2009-2025 Bitcoin Core developers
-
-// Copyright (C) 2026 COINWOW developers
-
-// Distributed under the MIT software license
-
-// Copyright (c) 2015-present The COINWOW Core developers
+// Copyright (c) 2015-2022 The Bitcoin Core developers
+// Copyright (c) 2024-present COINWOW Developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -283,7 +278,7 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
 
     // Disable reading to work around a libevent bug, fixed in 2.1.9
     // See https://github.com/libevent/libevent/commit/5ff8eb26371c4dc56f384b2de35bea2d87814779
-    // and https://github.com/coinwow/coinwow/pull/11593.
+    // and https://github.com/bitcoin/bitcoin/pull/11593.
     if (event_get_version_number() >= 0x02010600 && event_get_version_number() < 0x02010900) {
         if (conn) {
             bufferevent* bev = evhttp_connection_get_bufferevent(conn);
