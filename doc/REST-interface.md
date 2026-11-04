@@ -3,8 +3,8 @@ Unauthenticated REST Interface
 
 The REST API can be enabled with the `-rest` option.
 
-The interface runs on the same port as the JSON-RPC interface, by default port 8332 for mainnet, port 18332 for testnet,
-port 48332 for testnet4, port 38332 for signet, and port 18443 for regtest.
+The interface runs on the same port as the JSON-RPC interface, by default port 51446 for mainnet, port 51454 for testnet,
+port 51464 for testnet4, port 51474 for signet, and port 18443 for regtest.
 
 REST Interface consistency guarantees
 -------------------------------------
@@ -153,4 +153,4 @@ Refer to the `getrawmempool` RPC help for details. Defaults to setting
 
 Risks
 -------------
-Running a web browser on the same node with a REST enabled coinwowd can be a risk. Accessing prepared XSS websites could read out tx/block data of your node by placing links like `<script src="http://127.0.0.1:8332/rest/tx/1234567890.json">` which might break the nodes privacy.
+Running a web browser on the same node with a REST enabled coinwowd can be a risk. Accessing prepared XSS websites could read out tx/block data of your node by placing links like `<script src="http://127.0.0.1:51446/rest/tx/1234567890.json">` which might break the nodes privacy.

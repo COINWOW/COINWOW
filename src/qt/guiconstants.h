@@ -48,7 +48,7 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 #define SPINNER_FRAMES 36
 
 #define QAPP_ORG_NAME "COINWOW"
-#define QAPP_ORG_DOMAIN "coinwow.org"
+#define QAPP_ORG_DOMAIN "coinwow.ca"
 #define QAPP_APP_NAME_DEFAULT "COINWOW-Qt"
 #define QAPP_APP_NAME_TESTNET "COINWOW-Qt-testnet"
 #define QAPP_APP_NAME_TESTNET4 "COINWOW-Qt-testnet4"
