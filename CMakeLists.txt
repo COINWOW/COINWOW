@@ -109,7 +109,7 @@ option(BUILD_UTIL "Build coinwow-util executable." ${BUILD_TESTS})
 option(BUILD_UTIL_CHAINSTATE "Build experimental coinwow-chainstate executable." OFF)
 option(BUILD_KERNEL_LIB "Build experimental bitcoinkernel library." ${BUILD_UTIL_CHAINSTATE})
 
-add_subdirectory(src/consensus)
+add_subdirectory(src/consensus EXCLUDE_FROM_ALL)
 option(ENABLE_WALLET "Enable wallet." ON)
 if(ENABLE_WALLET)
   if(VCPKG_TARGET_TRIPLET)
