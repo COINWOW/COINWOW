@@ -35,12 +35,21 @@ add_library(coinwow_wallet STATIC EXCLUDE_FROM_ALL
   walletdb.cpp
   walletutil.cpp
 )
+# CMake >= 4.x renamed the FindSQLite3 target to SQLite3::SQLite3 and
+# deprecated SQLite::SQLite3. Prefer the new name, fall back to the old one.
+set(coinwow_sqlite3_target "")
+if(TARGET SQLite3::SQLite3)
+  set(coinwow_sqlite3_target SQLite3::SQLite3)
+elseif(TARGET SQLite::SQLite3)
+  set(coinwow_sqlite3_target SQLite::SQLite3)
+endif()
+
 target_link_libraries(coinwow_wallet
   PRIVATE
     core_interface
     coinwow_common
     $<TARGET_NAME_IF_EXISTS:unofficial::sqlite3::sqlite3>
-    $<TARGET_NAME_IF_EXISTS:SQLite::SQLite3>
+    ${coinwow_sqlite3_target}
     univalue
     Boost::headers
     $<TARGET_NAME_IF_EXISTS:USDT::headers>
