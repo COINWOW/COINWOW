@@ -75,3 +75,22 @@ for the build process to remain somewhat deterministic. Here's how it works:
   included script. Detached signatures are available from this [repository](https://github.com/bitcoin-core/bitcoin-detached-sigs).
 - Builders feed the unsigned app + detached signature back into Guix, which combines the
   pieces into a deterministic ZIP.
+
+## Signing and notarizing the macOS app
+
+Release builds are signed with a Developer ID Application certificate and
+notarized by Apple, so macOS opens them without a security warning. This is
+done on a Mac that holds the certificate, after `make deploy`:
+
+```bash
+# One time: store the notarization credentials in the Keychain.
+xcrun notarytool store-credentials "coinwow-notary"
+
+# For every release:
+./contrib/macdeploy/sign-notarize.sh build/dist/COINWOW-Qt.app COINWOW-Core-macOS.zip
+```
+
+The script signs the app with the hardened runtime, submits it to Apple, waits
+for the result, staples the ticket, checks it with `spctl` and writes the final
+ZIP (the app and `COPYING`) with its SHA-256. Certificates, passwords and team
+identifiers are never stored in this repository.
