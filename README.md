@@ -8,6 +8,7 @@ interface.
 - Website: https://coinwow.ca
 - Source code: https://github.com/COINWOW/COINWOW
 - Releases: https://github.com/COINWOW/COINWOW/releases
+- Community (Discord): https://discord.gg/vn4dKwfrHM
 
 COINWOW is an independent blockchain derived from
 [Bitcoin Core](https://github.com/bitcoin/bitcoin). It keeps Bitcoin's

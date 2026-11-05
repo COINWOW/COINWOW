@@ -8,6 +8,9 @@ COINWOW Core v1.0.0 is the first official, cleaned-up release of the COINWOW
 reference node and wallet. Earlier public builds identified themselves as
 29.99.0 (a Bitcoin Core development version number).
 
+Website: https://coinwow.ca  
+Community (Discord): https://discord.gg/vn4dKwfrHM
+
 ## Compatibility
 
 - **Same network, same chain.** v1.0.0 follows exactly the same consensus
