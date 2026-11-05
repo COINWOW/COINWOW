@@ -132,9 +132,13 @@ jobs:
         env:
           HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
         run: |
+          # Fail if brew fails, even though its output goes through a filter below.
+          set -o pipefail
+          # Homebrew prints an informational annotation because HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK is set; drop only that line.
+          filter_brew_notice() { grep -v -F 'HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK' || true; }
           # A workaround for "The `brew link` step did not complete successfully" error.
-          brew install --quiet python@3 || brew link --overwrite python@3
-          brew install --quiet coreutils ninja pkgconf gnu-getopt ccache boost libevent zeromq qt@6 qrencode
+          { brew install --quiet python@3 || brew link --overwrite python@3; } 2>&1 | filter_brew_notice
+          brew install --quiet coreutils ninja pkgconf gnu-getopt ccache boost libevent zeromq qt@6 qrencode 2>&1 | filter_brew_notice
 
       - name: Set Ccache directory
         run: echo "CCACHE_DIR=${RUNNER_TEMP}/ccache_dir" >> "$GITHUB_ENV"
@@ -214,9 +218,36 @@ jobs:
 
       - name: Configure Developer Command Prompt for Microsoft Visual C++
         # Using microsoft/setup-msbuild is not enough.
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
+        # Run vcvarsall.bat directly and export the resulting environment to the
+        # following steps, instead of using ilammy/msvc-dev-cmd, which still runs on Node 20.
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsPath = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vsPath) { throw 'Visual Studio with the C++ tools was not found' }
+          $vcvars = Join-Path $vsPath 'VC\Auxiliary\Build\vcvarsall.bat'
+          $oldPath = @($env:Path -split ';' | Where-Object { $_ })
+          $oldEnv = @{}
+          Get-ChildItem Env: | ForEach-Object { $oldEnv[$_.Name] = $_.Value }
+          $vars = cmd /c "`"$vcvars`" x64 >nul && set"
+          if ($LASTEXITCODE -ne 0) { throw 'vcvarsall.bat failed' }
+          $newPaths = @()
+          foreach ($line in $vars) {
+            if ($line -notmatch '^([^=]+)=(.*)$') { continue }
+            $name = $Matches[1]
+            $value = $Matches[2]
+            if ($name -ieq 'Path') {
+              foreach ($entry in ($value -split ';')) {
+                if ($entry -and ($oldPath -notcontains $entry)) { $newPaths += $entry }
+              }
+            } elseif ($oldEnv[$name] -ne $value) {
+              Add-Content -Path $env:GITHUB_ENV -Value "$name=$value" -Encoding utf8
+            }
+          }
+          [array]::Reverse($newPaths)
+          foreach ($entry in $newPaths) {
+            Add-Content -Path $env:GITHUB_PATH -Value $entry -Encoding utf8
+          }
 
       - name: Get tool information
         shell: pwsh
