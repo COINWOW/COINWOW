@@ -43,7 +43,7 @@
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.coinwowfoundation.COINWOW-Qt</string>
+  <string>ca.coinwow.core</string>
 
   <key>CFBundleURLTypes</key>
   <array>

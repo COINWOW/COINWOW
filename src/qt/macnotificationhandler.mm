@@ -14,7 +14,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.coinwowfoundation.COINWOW-Qt";
+        return @"ca.coinwow.core";
     } else {
         return [self __bundleIdentifier];
     }
