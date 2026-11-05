@@ -1,8 +1,6 @@
-# COINWOW Core v1.0.0 — release notes (DRAFT)
+# COINWOW Core v1.0.0 — release notes
 
-> **Draft.** v1.0.0 is not tagged or published yet. The download location
-> will be https://github.com/COINWOW/COINWOW/releases once the release is
-> approved. Do not link to assets that do not exist yet.
+Downloads: https://github.com/COINWOW/COINWOW/releases/tag/v1.0.0
 
 COINWOW Core v1.0.0 is the first official, cleaned-up release of the COINWOW
 reference node and wallet. Earlier public builds identified themselves as
