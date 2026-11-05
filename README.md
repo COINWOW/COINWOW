@@ -37,6 +37,9 @@ block, network identity and monetary parameters.
 Full details and the soft-fork schedule are in
 [doc/coinwow/consensus-audit.md](doc/coinwow/consensus-audit.md).
 
+Want to mine? See [doc/coinwow/mining.md](doc/coinwow/mining.md)
+(en français : [doc/coinwow/mining.fr.md](doc/coinwow/mining.fr.md)).
+
 ## Components
 
 - `coinwowd`: full node and RPC server
