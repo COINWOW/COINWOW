@@ -66,7 +66,9 @@ Community (Discord): https://discord.gg/vn4dKwfrHM
   value you cannot afford to lose to a malicious miner. SegWit and Taproot
   are fully enforced. See `doc/coinwow/consensus-audit.md`.
 - The **macOS app is signed and notarized by Apple** (Developer ID), so it
-  opens without a security warning.
+  opens without a security warning. It is built for **Apple Silicon**
+  (M1 or newer) and requires **macOS 15 or newer**. Intel Macs and older
+  macOS versions are not supported yet.
 - The **Windows** installer and ZIP are **not code-signed** yet, so Windows
   SmartScreen shows "Windows protected your PC" the first time. Click
   **More info**, then **Run anyway**. Always verify downloads against the
