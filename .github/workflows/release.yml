@@ -165,14 +165,20 @@ jobs:
       - name: Deploy (app + zip)
         run: cmake --build build --target deploy
 
-      - name: Check the minimum macOS version
+      - name: Locate the deployed app
         run: |
-          rm -rf chk && mkdir chk
-          ZIP="$(find build -maxdepth 2 -name '*.zip' | head -1)"
-          echo "Zip: $ZIP"
-          ditto -x -k "$ZIP" chk
-          APP="$(find chk -maxdepth 3 -name '*.app' | head -1)"
+          APP="$(find build -maxdepth 3 -type d -name 'COINWOW-Qt.app' -exec test -d '{}/Contents/Frameworks' \; -print | head -1)"
           echo "App: $APP"
+          [ -n "$APP" ] || { echo "deployed app not found"; exit 1; }
+          echo "APP=$APP" >> "$GITHUB_ENV"
+
+      - name: Check the framework layout and the minimum macOS version
+        run: |
+          # Frameworks must keep their symlinks (Versions/Current, top-level binary),
+          # otherwise codesign later refuses them.
+          for fw in "$APP"/Contents/Frameworks/*.framework; do
+            [ -L "$fw/Versions/Current" ] || { echo "Broken framework (no Current symlink): $fw"; exit 1; }
+          done
           : > minos.txt
           while IFS= read -r f; do
             vtool -show-build "$f" 2>/dev/null | awk -v f="$f" '/minos/{print $2, f}' >> minos.txt || true
@@ -187,8 +193,13 @@ jobs:
       - name: Package
         run: |
           VER="${GITHUB_REF_NAME}"; [ "${GITHUB_REF_TYPE}" = "tag" ] || VER="dev-${GITHUB_SHA::7}"
-          ZIP="$(find build -maxdepth 2 -name '*.zip' | head -1)"
-          cp "$ZIP" "coinwow-${VER}-macos-arm64-unsigned.zip"
+          # ditto keeps symlinks and permissions, unlike a plain zip.
+          ditto -c -k --keepParent "$APP" "coinwow-${VER}-macos-arm64-unsigned.zip"
+          # Verify the archive round-trips with its symlinks intact.
+          rm -rf verify && mkdir verify && ditto -x -k "coinwow-${VER}-macos-arm64-unsigned.zip" verify
+          for fw in verify/COINWOW-Qt.app/Contents/Frameworks/*.framework; do
+            [ -L "$fw/Versions/Current" ] || { echo "Archive lost a framework symlink: $fw"; exit 1; }
+          done
 
       # Artefact SEPARE : il n'entre ni dans SHA256SUMS ni dans le brouillon de release.
       - uses: actions/upload-artifact@v6
