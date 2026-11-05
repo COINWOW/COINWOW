@@ -162,8 +162,19 @@ jobs:
             -DWITH_ZMQ=OFF -DREDUCE_EXPORTS=ON -DWITH_CCACHE=OFF -DINSTALL_MAN=OFF
           cmake --build build -j"$(sysctl -n hw.ncpu)"
 
+      # Homebrew splits Qt into several formulae (qtbase, qttranslations, ...), so
+      # macdeployqtplus cannot find the plugins next to the translations. Point it
+      # at qtbase, which holds the platform plugins ("cocoa"), and fail early if
+      # they are not there.
       - name: Deploy (app + zip)
-        run: cmake --build build --target deploy
+        run: |
+          QTDIR="$(brew --prefix qtbase)"
+          export QTDIR
+          echo "QTDIR=$QTDIR"
+          find "$QTDIR/" -name 'libqcocoa.dylib' 2>/dev/null | head -3
+          test -f "$QTDIR/share/qt/plugins/platforms/libqcocoa.dylib" \
+            || { echo "Qt cocoa platform plugin not found in $QTDIR"; exit 1; }
+          cmake --build build --target deploy
 
       - name: Locate the deployed app
         run: |
@@ -179,6 +190,9 @@ jobs:
           for fw in "$APP"/Contents/Frameworks/*.framework; do
             [ -L "$fw/Versions/Current" ] || { echo "Broken framework (no Current symlink): $fw"; exit 1; }
           done
+          # The app cannot start without the Qt platform plugin.
+          [ -f "$APP/Contents/PlugIns/platforms/libqcocoa.dylib" ] \
+            || { echo "Missing Contents/PlugIns/platforms/libqcocoa.dylib"; exit 1; }
           : > minos.txt
           while IFS= read -r f; do
             vtool -show-build "$f" 2>/dev/null | awk -v f="$f" '/minos/{print $2, f}' >> minos.txt || true
