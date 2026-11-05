@@ -65,9 +65,12 @@ Community (Discord): https://discord.gg/vn4dKwfrHM
   enforced only as relay policy, so do not rely on CLTV/CSV timelocks for
   value you cannot afford to lose to a malicious miner. SegWit and Taproot
   are fully enforced. See `doc/coinwow/consensus-audit.md`.
-- Binaries are **not code-signed** yet (Windows Authenticode, macOS
-  notarization), so operating-system warnings are expected. Verify
-  downloads against the published SHA256SUMS.
+- The **macOS app is signed and notarized by Apple** (Developer ID), so it
+  opens without a security warning.
+- The **Windows** installer and ZIP are **not code-signed** yet, so Windows
+  SmartScreen shows "Windows protected your PC" the first time. Click
+  **More info**, then **Run anyway**. Always verify downloads against the
+  published SHA256SUMS.
 
 ## Upgrading
 
