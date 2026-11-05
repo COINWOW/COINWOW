@@ -1,5 +1,5 @@
 # Builds de release COINWOW Core : Linux x86_64, Windows x64 et macOS arm64.
-# Le Mac est compile ici sur macos-14 pour cibler macOS 14 minimum (un build fait
+# Le Mac est compile ici sur macos-15 pour cibler macOS 15 minimum (un build fait
 # sur un Mac recent exige la derniere version de macOS). L'app Mac sortie d'ici est
 # NON SIGNEE et reste hors du brouillon de release : le developpeur la telecharge,
 # la signe et la notarise chez lui (contrib/macdeploy/sign-notarize.sh).
@@ -133,15 +133,15 @@ jobs:
           retention-days: 14
 
   macos-arm64:
-    name: macOS arm64 (non signé, cible macOS 14)
-    runs-on: macos-14
+    name: macOS arm64 (non signé, cible macOS 15)
+    runs-on: macos-15
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v6
 
       - name: Xcode
         run: |
-          sudo xcode-select --switch /Applications/Xcode_15.0.app
+          xcode-select -p
           clang --version
 
       - name: Install Homebrew packages
@@ -157,7 +157,7 @@ jobs:
         run: |
           cmake -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 \
             -DBUILD_GUI=ON -DBUILD_GUI_TESTS=OFF -DBUILD_TESTS=OFF -DBUILD_BENCH=OFF \
             -DWITH_ZMQ=OFF -DREDUCE_EXPORTS=ON -DWITH_CCACHE=OFF -DINSTALL_MAN=OFF
           cmake --build build -j"$(sysctl -n hw.ncpu)"
@@ -201,8 +201,8 @@ jobs:
           HIGHEST="$(sort -V minos.txt | tail -1 | awk '{print $1}')"
           echo "Highest minimum macOS: $HIGHEST"
           [ -n "$HIGHEST" ] || { echo "no Mach-O found"; exit 1; }
-          [ "$(printf '%s\n14.0\n' "$HIGHEST" | sort -V | tail -1)" = "14.0" ] \
-            || { echo "A binary requires macOS $HIGHEST (> 14.0)"; exit 1; }
+          [ "$(printf '%s\n15.0\n' "$HIGHEST" | sort -V | tail -1)" = "15.0" ] \
+            || { echo "A binary requires macOS $HIGHEST (> 15.0)"; exit 1; }
 
       - name: Package
         run: |
