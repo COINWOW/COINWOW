@@ -80,7 +80,6 @@
         <file alias="nb">locale/coinwow_nb.qm</file>
         <file alias="ne">locale/coinwow_ne.qm</file>
         <file alias="nl">locale/coinwow_nl.qm</file>
-        <file alias="no">locale/coinwow_no.qm</file>
         <file alias="or">locale/coinwow_or.qm</file>
         <file alias="pa">locale/coinwow_pa.qm</file>
         <file alias="pam">locale/coinwow_pam.qm</file>
